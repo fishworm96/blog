@@ -1,2 +1,9 @@
 {"level":"ERROR","time":"2022-08-19T22:52:55.545+0800","caller":"mysql/mysql.go:23","msg":"conncet DB faild","error":"sql: unknown driver \"mysql\" (forgotten import?)"}
 {"level":"ERROR","time":"2022-08-19T22:53:08.032+0800","caller":"mysql/mysql.go:23","msg":"conncet DB faild","error":"sql: unknown driver \"mysql\" (forgotten import?)"}
+{"level":"INFO","time":"2022-08-19T23:05:05.825+0800","caller":"logger/logger.go:67","msg":"/","status":200,"method":"GET","path":"/","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0}
+{"level":"INFO","time":"2022-08-19T23:05:45.200+0800","caller":"blog/main.go:67","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2022-08-19T23:05:45.201+0800","caller":"blog/main.go:74","msg":"Server exiting"}
+{"level":"INFO","time":"2022-08-19T23:06:46.538+0800","caller":"blog/main.go:67","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2022-08-19T23:06:46.555+0800","caller":"blog/main.go:74","msg":"Server exiting"}
+{"level":"INFO","time":"2022-08-19T23:07:42.388+0800","caller":"blog/main.go:67","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2022-08-19T23:07:42.403+0800","caller":"blog/main.go:74","msg":"Server exiting"}
