@@ -39,7 +39,7 @@ type MySQLConfig struct {
 
 type RedisConfig struct {
 	Host string `mapstructure:"host"`
-	password string `mapstructure:"password"`
+	Password string `mapstructure:"password"`
 	Port int `mapstructure:"post"`
 	DB int `mapstructure:"db"`
 	PoolSize int `mapstructure:"pool_size"`
