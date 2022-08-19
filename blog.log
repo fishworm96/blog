@@ -1,0 +1,2 @@
+{"level":"ERROR","time":"2022-08-19T22:52:55.545+0800","caller":"mysql/mysql.go:23","msg":"conncet DB faild","error":"sql: unknown driver \"mysql\" (forgotten import?)"}
+{"level":"ERROR","time":"2022-08-19T22:53:08.032+0800","caller":"mysql/mysql.go:23","msg":"conncet DB faild","error":"sql: unknown driver \"mysql\" (forgotten import?)"}
