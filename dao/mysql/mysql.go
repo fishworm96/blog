@@ -1,10 +1,12 @@
 package mysql
 
 import (
-	"blog/setting"
 	"fmt"
 
+	"blog/setting"
+
 	"github.com/jmoiron/sqlx"
+	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 )
 
@@ -20,7 +22,7 @@ func Init(cfg *setting.MySQLConfig) (err error) {
 	)
 	db, err := sqlx.Connect("mysql", dsn)
 	if err != nil {
-		zap.L().Error("conncet DB faild", zap.Error(err))
+		zap.L().Error("connect DB failed", zap.Error(err))
 		return
 	}
 	db.SetMaxOpenConns(cfg.MaxOpenConns)

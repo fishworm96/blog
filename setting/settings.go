@@ -40,7 +40,7 @@ type MySQLConfig struct {
 type RedisConfig struct {
 	Host string `mapstructure:"host"`
 	Password string `mapstructure:"password"`
-	Port int `mapstructure:"post"`
+	Port int `mapstructure:"port"`
 	DB int `mapstructure:"db"`
 	PoolSize int `mapstructure:"pool_size"`
 }
@@ -50,17 +50,17 @@ func Init(filePath string) (err error) {
 	viper.AddConfigPath(".")
 	err = viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("viper.ReadInConfig() faild, err:%v\n", err)
+		fmt.Println("viper.ReadInConfig() failed, err:%v\n", err)
 		return
 	}
 	if err := viper.Unmarshal(Conf); err != nil {
-		fmt.Println("viper.Unmarshal faild, err:%v", err)
+		fmt.Println("viper.Unmarshal failed, err:%v", err)
 	}
 	viper.WatchConfig()
 	viper.OnConfigChange(func (in fsnotify.Event) {
 		fmt.Println("配置文件修改了...")
 		if err := viper.Unmarshal(Conf); err != nil {
-			fmt.Printf("viper.Unmarshal faild, err:%v", err)
+			fmt.Printf("viper.Unmarshal failed, err:%v", err)
 		}
 	})
 	return
