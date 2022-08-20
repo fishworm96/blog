@@ -13,6 +13,7 @@ import (
 	"blog/dao/mysql"
 	"blog/dao/redis"
 	"blog/logger"
+	"blog/pkg/snowflake"
 	"blog/router"
 	"blog/setting"
 
@@ -47,6 +48,10 @@ func main() {
 		return
 	}
 	defer redis.Close()
+
+	if err := snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID); err != nil {
+		fmt.Printf("init snowflake failed, err:%v\n", err)
+	}
 
 	r := routes.Setup()
 	fmt.Println(setting.Conf.Port)
