@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"blog/controller"
 	"blog/dao/mysql"
 	"blog/dao/redis"
 	"blog/logger"
@@ -31,7 +32,7 @@ func main() {
 	}
 	defer zap.L().Sync()
 	
-	if err := logger.Init(setting.Conf.LogConfig); err != nil {
+	if err := logger.Init(setting.Conf.LogConfig, setting.Conf.Mode); err != nil {
 		fmt.Printf("init logger failed, err:%v", err)
 		return
 	}
@@ -53,7 +54,12 @@ func main() {
 		fmt.Printf("init snowflake failed, err:%v\n", err)
 	}
 
-	r := routes.Setup()
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init InitTrans failed, err:%v\n", err)
+		return
+	}
+
+	r := routes.Setup(setting.Conf.Mode)
 	fmt.Println(setting.Conf.Port)
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%d", setting.Conf.Port),

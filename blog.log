@@ -7,3 +7,31 @@
 {"level":"INFO","time":"2022-08-19T23:06:46.555+0800","caller":"blog/main.go:74","msg":"Server exiting"}
 {"level":"INFO","time":"2022-08-19T23:07:42.388+0800","caller":"blog/main.go:67","msg":"Shutdown Server ..."}
 {"level":"INFO","time":"2022-08-19T23:07:42.403+0800","caller":"blog/main.go:74","msg":"Server exiting"}
+{"level":"INFO","time":"2022-08-20T16:37:03.033+0800","caller":"logger/logger.go:67","msg":"/api/v/signUp","status":404,"method":"POST","path":"/api/v/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0}
+{"level":"ERROR","time":"2022-08-20T16:37:19.840+0800","caller":"controller/user.go:18","msg":"SignUp with invalid param","error":"Key: 'ParamSignUp.re_password' Error:Field validation for 're_password' failed on the 'required' tag"}
+{"level":"INFO","time":"2022-08-20T16:37:19.840+0800","caller":"logger/logger.go:67","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0002384}
+{"level":"ERROR","time":"2022-08-20T16:37:37.634+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-20T16:37:37.635+0800","caller":"logger/logger.go:67","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0027117}
+{"level":"ERROR","time":"2022-08-21T22:07:35.157+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:07:35.180+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0237427}
+{"level":"ERROR","time":"2022-08-21T22:20:06.972+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:20:06.984+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0129108}
+{"level":"ERROR","time":"2022-08-21T22:21:27.331+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:21:27.345+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0141561}
+{"level":"INFO","time":"2022-08-21T22:25:29.134+0800","caller":"blog/main.go:78","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2022-08-21T22:25:29.151+0800","caller":"blog/main.go:85","msg":"Server exiting"}
+{"level":"ERROR","time":"2022-08-21T22:27:42.716+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:27:42.728+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0124869}
+{"level":"ERROR","time":"2022-08-21T22:30:03.941+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:30:03.957+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0162342}
+{"level":"ERROR","time":"2022-08-21T22:31:23.241+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:31:23.255+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0136116}
+{"level":"ERROR","time":"2022-08-21T22:33:02.618+0800","caller":"mysql/mysql.go:26","msg":"connect DB failed","error":"invalid bool value: True%!(EXTRA string=)"}
+{"level":"ERROR","time":"2022-08-21T22:34:00.639+0800","caller":"mysql/mysql.go:27","msg":"connect DB failed","error":"dial tcp: lookup 127.0.01: no such host"}
+{"level":"INFO","time":"2022-08-21T22:34:16.993+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0095029}
+{"level":"ERROR","time":"2022-08-21T22:35:35.725+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:35:35.739+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0138613}
+{"level":"ERROR","time":"2022-08-21T22:36:19.916+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"Error 1046: No database selected"}
+{"level":"INFO","time":"2022-08-21T22:36:19.937+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0219373}
+{"level":"ERROR","time":"2022-08-21T22:37:19.981+0800","caller":"controller/user.go:34","msg":"logic.SingUp failed","error":"用户已存在"}
+{"level":"INFO","time":"2022-08-21T22:37:19.994+0800","caller":"logger/logger.go:78","msg":"/api/v1/signUp","status":200,"method":"POST","path":"/api/v1/signUp","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.2","errors":"","cost":0.0152935}
