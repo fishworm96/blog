@@ -52,11 +52,11 @@ func Init(filePath string) (err error) {
 	viper.AddConfigPath(".")
 	err = viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("viper.ReadInConfig() failed, err:%v\n", err)
+		fmt.Printf("viper.ReadInConfig() failed, err:%v\n", err)
 		return
 	}
 	if err := viper.Unmarshal(Conf); err != nil {
-		fmt.Println("viper.Unmarshal failed, err:%v", err)
+		fmt.Printf("viper.Unmarshal failed, err:%v", err)
 	}
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
