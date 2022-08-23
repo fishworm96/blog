@@ -1,6 +1,13 @@
 package main
 
 import (
+	"blog/controller"
+	"blog/dao/mysql"
+	"blog/dao/redis"
+	"blog/logger"
+	"blog/pkg/snowflake"
+	"blog/routes"
+	"blog/setting"
 	"context"
 	"fmt"
 	"log"
@@ -10,40 +17,36 @@ import (
 	"syscall"
 	"time"
 
-	"blog/controller"
-	"blog/dao/mysql"
-	"blog/dao/redis"
-	"blog/logger"
-	"blog/pkg/snowflake"
-	"blog/router"
-	"blog/setting"
-
 	"go.uber.org/zap"
 )
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Printf("need config field.eg: blog config.yaml")
+		fmt.Println(os.Args)
+		fmt.Println("need config file.eg: bluebell config.yaml")
 		return
 	}
+	// 1. 加载配置
 	if err := setting.Init(os.Args[1]); err != nil {
-		fmt.Printf("init setting failed, err:%v", err)
+		fmt.Printf("init setting failed, err:%v\n", err)
 		return
 	}
-	defer zap.L().Sync()
-	
+	fmt.Println(setting.Conf)
+	fmt.Println(setting.Conf.LogConfig == nil)
+	// 2. 初始化日志
 	if err := logger.Init(setting.Conf.LogConfig, setting.Conf.Mode); err != nil {
-		fmt.Printf("init logger failed, err:%v", err)
+		fmt.Printf("init logger failed, err:%v\n", err)
 		return
 	}
 	defer zap.L().Sync()
-
+	zap.L().Debug("logger init success...")
+	// 3. 初始化MySQL连接
 	if err := mysql.Init(setting.Conf.MySQLConfig); err != nil {
-		fmt.Printf("init mysql failed, err:%v", err)
+		fmt.Printf("init mysql failed, err:%v\n", err)
 		return
 	}
 	defer mysql.Close()
-
+	// 4. 初始化Redis连接
 	if err := redis.Init(setting.Conf.RedisConfig); err != nil {
 		fmt.Printf("init redis failed, err:%v\n", err)
 		return
@@ -52,32 +55,42 @@ func main() {
 
 	if err := snowflake.Init(setting.Conf.StartTime, setting.Conf.MachineID); err != nil {
 		fmt.Printf("init snowflake failed, err:%v\n", err)
+		return
 	}
 
 	if err := controller.InitTrans("zh"); err != nil {
 		fmt.Printf("init InitTrans failed, err:%v\n", err)
 		return
 	}
-
+	// 5. 注册路由
 	r := routes.Setup(setting.Conf.Mode)
+	// 6. 启动服务（优雅关机）
 	fmt.Println(setting.Conf.Port)
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", setting.Conf.Port),
+		Addr:    fmt.Sprintf(":%d", setting.Conf.Port),
 		Handler: r,
 	}
 
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed{
+		// 开启一个goroutine启动服务
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
+	// 等待中断信号来优雅地关闭服务器，为关闭服务器操作设置一个5秒的超时
+	quit := make(chan os.Signal, 1) // 创建一个接收信号的通道
+	// kill 默认会发送 syscall.SIGTERM 信号
+	// kill -2 发送 syscall.SIGINT 信号，我们常用的Ctrl+C就是触发系统SIGINT信号
+	// kill -9 发送 syscall.SIGKILL 信号，但是不能被捕获，所以不需要添加它
+	// signal.Notify把收到的 syscall.SIGINT或syscall.SIGTERM 信号转发给quit
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM) // 此处不会阻塞
+	<-quit                                               // 阻塞在此，当接收到上述两种信号时才会往下执行
 	zap.L().Info("Shutdown Server ...")
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+	// 创建一个5秒超时的context
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+	// 5秒内优雅关闭服务（将未处理完的请求处理完再关闭服务），超过5秒就超时退出
 	if err := srv.Shutdown(ctx); err != nil {
 		zap.L().Fatal("Server Shutdown", zap.Error(err))
 	}
