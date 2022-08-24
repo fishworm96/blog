@@ -3,6 +3,7 @@ package routes
 import (
 	"blog/controller"
 	"blog/logger"
+	"blog/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,14 @@ if mode == gin.ReleaseMode {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	r.POST("/signUp", controller.SignUpHandler)
-	r.POST("/login", controller.LoginHandler)
+	v1 := r.Group("/api/v1")
+
+	v1.POST("/signUp", controller.SignUpHandler)
+	v1.POST("/login", controller.LoginHandler)
+	v1.GET("/community", controller.CommunityHandler)
+	v1.Use(middlewares.JWTAuthMiddleware())
+	{
+		
+	}
 	return r
 }
