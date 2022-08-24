@@ -21,6 +21,8 @@ if mode == gin.ReleaseMode {
 	v1.POST("/signUp", controller.SignUpHandler)
 	v1.POST("/login", controller.LoginHandler)
 	v1.GET("/community", controller.CommunityHandler)
+	v1.GET("/community/:id", controller.CommunityDetailHandler)
+
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		
