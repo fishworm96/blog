@@ -73,3 +73,7 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 	}
 	return
 }
+
+func UpdatePost(p *models.ParamPost) (err error) {
+	return mysql.UpdatePost(p)
+}

@@ -11,3 +11,10 @@ type ParamLogin struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+// ParamPost
+type ParamPost struct {
+	Title string `json:"title" binding:"required"`
+	Content string `json:"content" binding:"required"`
+	PostID int64 `json:"post_id" binding:"required"`
+}

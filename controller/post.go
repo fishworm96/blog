@@ -78,3 +78,29 @@ func GetPostListHandler(c *gin.Context) {
 	// 返回响应
 	ResponseSuccess(c, data )
 }
+
+// UpdatePostHandler 更新帖子
+func UpdatePostHandler(c *gin.Context) {
+	// 获取参数
+	p := new(models.ParamPost)
+	if err := c.ShouldBindJSON(p); err != nil {
+		zap.L().Debug("c.ShouldBindJSON(p) err", zap.Any("err", err))
+		zap.L().Error("update post with invalid parma")
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+	// 修改帖子信息
+	if err := logic.UpdatePost(p); err != nil {
+		zap.L().Error("logic.UpdatePost(p) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+
+	// 返回响应
+	ResponseSuccess(c, nil)
+}
