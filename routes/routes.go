@@ -28,6 +28,7 @@ if mode == gin.ReleaseMode {
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler)
+		v1.PUT("/post/edit", controller.UpdatePostHandler)
 	}
 	return r
 }

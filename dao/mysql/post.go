@@ -26,3 +26,10 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 	err = db.Select(&posts, sqlStr, (page - 1) * size, size)
 	return
 }
+
+// UpdatePost 更新文章信息
+func UpdatePost(p *models.ParamPost) (err error) {
+	sqlStr := `update post set title = ?, content = ? where post_id = ?`
+	_, err = db.Exec(sqlStr, p.Title, p.Content, p.PostID)
+	return
+}
