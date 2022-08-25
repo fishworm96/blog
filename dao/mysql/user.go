@@ -37,6 +37,7 @@ func encryptPassword(oPassword string) string {
 	return hex.EncodeToString(h.Sum([]byte(oPassword)))
 }
 
+// Login 查询数据库判断账号和密码是否正确
 func Login(user *models.User) (err error) {
 	oPassword := user.Password
 	sqlStr := `select user_id, username, password from user where username = ?`
@@ -53,5 +54,13 @@ func Login(user *models.User) (err error) {
 	if password != user.Password {
 		return ErrorInvalidPassword
 	}
+	return
+}
+
+// GetUserById 根据用户id获取用户信息
+func GetUserById(uid int64) (user *models.User, err error) {
+	user = new(models.User)
+	sqlStr := `select user_id, username from user where user_id = ?`
+	err = db.Get(user, sqlStr, uid)
 	return
 }
