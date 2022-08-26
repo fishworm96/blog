@@ -82,6 +82,13 @@ func GetPostListHandler(c *gin.Context) {
 // UpdatePostHandler 更新帖子
 func UpdatePostHandler(c *gin.Context) {
 	// 获取参数
+	pidStr := c.Param("id")
+	pid, err := strconv.ParseInt(pidStr, 10, 64)
+	if err != nil {
+		zap.L().Error("update post with param", zap.Int64("pid",pid), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
 	p := new(models.ParamPost)
 	if err := c.ShouldBindJSON(p); err != nil {
 		zap.L().Debug("c.ShouldBindJSON(p) err", zap.Any("err", err))
@@ -95,12 +102,32 @@ func UpdatePostHandler(c *gin.Context) {
 		return
 	}
 	// 修改帖子信息
-	if err := logic.UpdatePost(p); err != nil {
+	if err := logic.UpdatePost(pid, p); err != nil {
 		zap.L().Error("logic.UpdatePost(p) failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
 
+	// 返回响应
+	ResponseSuccess(c, nil)
+}
+
+// DeletePostHandler 删除帖子
+func DeletePostHandler(c *gin.Context) {
+	// 获取参数
+	pidStr := c.Param("id")
+	pid, err := strconv.ParseInt(pidStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete post with invalid param",zap.Int64("pid", pid), zap.Error(err))
+			ResponseError(c, CodeInvalidParam)
+			return
+	}
+	// 根据id删除文章
+	if err := logic.DeletePostById(pid); err != nil {
+		zap.L().Error("logic.DeletePostById(pid) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
 	// 返回响应
 	ResponseSuccess(c, nil)
 }
