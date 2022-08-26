@@ -37,8 +37,8 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 	}
 	// 接口数据拼接
 	data = &models.ApiPostDetail{
-		AuthorName: user.Username,
-		Post: post,
+		AuthorName:      user.Username,
+		Post:            post,
 		CommunityDetail: community,
 	}
 	return
@@ -65,8 +65,8 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 			continue
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName: user.Username,
-			Post: post,
+			AuthorName:      user.Username,
+			Post:            post,
 			CommunityDetail: community,
 		}
 		data = append(data, postDetail)
@@ -74,6 +74,10 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 	return
 }
 
-func UpdatePost(p *models.ParamPost) (err error) {
-	return mysql.UpdatePost(p)
+func UpdatePost(pid int64, p *models.ParamPost) error {
+	return mysql.UpdatePost(pid, p)
+}
+
+func DeletePostById(pid int64) error {
+	return mysql.DeletePostById(pid)
 }

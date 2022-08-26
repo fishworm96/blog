@@ -28,8 +28,14 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 }
 
 // UpdatePost 更新文章信息
-func UpdatePost(p *models.ParamPost) (err error) {
+func UpdatePost(pid int64, p *models.ParamPost) (err error) {
 	sqlStr := `update post set title = ?, content = ? where post_id = ?`
-	_, err = db.Exec(sqlStr, p.Title, p.Content, p.PostID)
+	_, err = db.Exec(sqlStr, p.Title, p.Content, pid)
+	return
+}
+
+func DeletePostById(pid int64) (err error) {
+	sqlStr := `delete from post where post_id = ?`
+	_, err = db.Exec(sqlStr, pid)
 	return
 }
