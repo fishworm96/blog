@@ -2,6 +2,7 @@ package logic
 
 import (
 	"blog/dao/mysql"
+	"blog/dao/redis"
 	"blog/models"
 	"blog/pkg/snowflake"
 
@@ -80,4 +81,16 @@ func UpdatePost(pid int64, p *models.ParamPost) error {
 
 func DeletePostById(pid int64) error {
 	return mysql.DeletePostById(pid)
+}
+
+func CreAtePost(p *models.Post) (err error) {
+	// 生成post id
+	p.ID = snowflake.GenID()
+	// 保存到数据库
+	err = mysql.CreatePost(p)
+	if err != nil {
+		return err
+	}
+	err = redis.CreatePost(p.ID)
+	return
 }

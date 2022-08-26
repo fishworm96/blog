@@ -24,12 +24,13 @@ if mode == gin.ReleaseMode {
 	v1.GET("/community/:id", controller.CommunityDetailHandler)
 	v1.GET("/post", controller.GetPostListHandler)
 	v1.GET("/post/:id", controller.GetPostDetailHandler)
-
+	
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler)
 		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
 		v1.DELETE("/post/delete/:id", controller.DeletePostHandler)
+		v1.POST("/vote", controller.PostVoteController)
 	}
 	return r
 }
