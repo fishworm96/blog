@@ -9,11 +9,16 @@ import (
 	"go.uber.org/zap"
 )
 
-func CreatePost(p *models.Post) error {
+func CreatePost(p *models.Post) (err error) {
 	// 生成post id
 	p.ID = snowflake.GenID()
 	// 保存到数据库
-	return mysql.CreatePost(p)
+	err = mysql.CreatePost(p)
+	if err != nil {
+		return err
+	}
+	err = redis.CreatePost(p.ID, p.CommunityID)
+	return
 }
 
 // GetPostById 根据帖子id查询帖子详情数据
@@ -83,14 +88,3 @@ func DeletePostById(pid int64) error {
 	return mysql.DeletePostById(pid)
 }
 
-func CreAtePost(p *models.Post) (err error) {
-	// 生成post id
-	p.ID = snowflake.GenID()
-	// 保存到数据库
-	err = mysql.CreatePost(p)
-	if err != nil {
-		return err
-	}
-	err = redis.CreatePost(p.ID)
-	return
-}
