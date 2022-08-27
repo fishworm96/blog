@@ -131,3 +131,33 @@ func DeletePostHandler(c *gin.Context) {
 	// 返回响应
 	ResponseSuccess(c, nil)
 }
+
+// GetPostListHandler2 升级版帖子列表接口
+// 根据前端传来的参数动态的获取帖子列表
+// 按创建时间排序 或者 按照 分数排序
+// 1.获取请求的query string参数
+// 2.去redis查询id列表
+// 3.根据id去数据库查询帖子详细信息
+func GetPostListHandler2(c *gin.Context) {
+	// 定义默认参数，如果没有传参数就用默认参数
+	p := &models.ParamPostList{
+		Page: 1,
+		Size: 10,
+		Order: models.OrderTime, // magic string
+	}
+	if err := c.ShouldBindQuery(p); err != nil {
+		zap.L().Error("GetPostListHandler2 with invalid params", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	data, err := logic.GetPostListNew(p)
+	// 获取数据
+	if err != nil {
+		zap.L().Error("logic.GetPostListNew(p) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	
+	// 返回响应
+	ResponseSuccess(c, data)
+}
