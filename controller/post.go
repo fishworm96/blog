@@ -133,11 +133,16 @@ func DeletePostHandler(c *gin.Context) {
 }
 
 // GetPostListHandler2 升级版帖子列表接口
-// 根据前端传来的参数动态的获取帖子列表
-// 按创建时间排序 或者 按照 分数排序
-// 1.获取请求的query string参数
-// 2.去redis查询id列表
-// 3.根据id去数据库查询帖子详细信息
+// @Summary 升级版帖子列表接口
+// @Description 可按社区按时间或分数排序查询帖子列表接口
+// @Tags 帖子相关接口(api分组展示使用的)
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer JWT"
+// @Param object query models.ParamPostList false "查询参数"
+// @Security ApiKeyAuth
+// @Success 200 {object} _ResponsePostList
+// @Router /posts2 [get]
 func GetPostListHandler2(c *gin.Context) {
 	// 定义默认参数，如果没有传参数就用默认参数
 	p := &models.ParamPostList{

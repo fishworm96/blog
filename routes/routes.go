@@ -15,7 +15,7 @@ if mode == gin.ReleaseMode {
 }
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-
+	r.GET("/swagger/*any", ginSwagger.WarpHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
 	v1.POST("/signUp", controller.SignUpHandler)

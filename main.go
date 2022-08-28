@@ -20,6 +20,16 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title blog项目接口文档
+// @version 1.0
+// @description Go web blog
+
+// @contact.name zhou
+// @contact.url https://www.fishworm96.github.io
+
+// @host localhost:8080
+// @BasePath /api/v1
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println(os.Args)
