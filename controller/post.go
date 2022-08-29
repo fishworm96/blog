@@ -11,6 +11,16 @@ import (
 )
 
 // CreatePostHandler 创建帖子
+// @Summary 创建帖子接口
+// @Description 创建帖子接口
+// @Tags 帖子相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer JWT"
+// @Param PostParam body models.Post false "社区ID"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /posts [post]
 func CreatePostHandler(c *gin.Context) {
 	// 1.获取参数及参数校验
 	p := new(models.Post)
@@ -44,12 +54,21 @@ func CreatePostHandler(c *gin.Context) {
 }
 
 // GetPostDetailHandler 根据帖子id获取帖子信息
+// @Summary 帖子信息接口
+// @Description 根据帖子id获取帖子信息的接口
+// @Tags 帖子相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param id path int true "查询帖子id"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /post/{id} [get]
 func GetPostDetailHandler(c *gin.Context) {
 	// 获取参数 (从url中获取帖子的id)
 	pidStr := c.Param("id")
 	pid, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
-		zap.L().Error("get post detail with invalid param", zap.Error(err))
+		zap.L().Error("get post detail with invalid param", zap.Int64("pid", pid), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
@@ -65,6 +84,14 @@ func GetPostDetailHandler(c *gin.Context) {
 }
 
 // GetPostListHandler 获取帖子列表的函数
+// @Summary 获取帖子列表接口
+// @Description 获取帖子列表接口
+// @Tags 帖子相关接口
+// @Accept application/json
+// @Produce application/json
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /post [get]
 func GetPostListHandler(c *gin.Context) {
 	// 获取分页参数
 	page, size := getPageInfo(c)
@@ -80,6 +107,17 @@ func GetPostListHandler(c *gin.Context) {
 }
 
 // UpdatePostHandler 更新帖子
+// @Summary 更新帖子接口
+// @Description 根据文章id来接收标题和内容修改帖子接口
+// @Tags 帖子相关接口
+// Accept application/json
+// @Produce application/json
+// @Param Authorization header string true "Bearer JWT"
+// @Param id path int true "文章id"
+// @Param ParamPost body models.ParamPost false "修改帖子内容"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /post/edit/{id} [put]
 func UpdatePostHandler(c *gin.Context) {
 	// 获取参数
 	pidStr := c.Param("id")
@@ -134,8 +172,8 @@ func DeletePostHandler(c *gin.Context) {
 
 // GetPostListHandler2 升级版帖子列表接口
 // @Summary 升级版帖子列表接口
-// @Description 可按社区按时间或分数排序查询帖子列表接口
-// @Tags 帖子相关接口(api分组展示使用的)
+// @Description 可按社区时间或分数排序查询帖子列表接口
+// @Tags 帖子相关接口
 // @Accept application/json
 // @Produce application/json
 // @Param Authorization header string true "Bearer JWT"

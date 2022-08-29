@@ -5,6 +5,11 @@ import (
 	"blog/logger"
 	"blog/middlewares"
 
+	_ "blog/docs" // 千万不要忘了导入把你上一步生成的docs
+
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +20,7 @@ if mode == gin.ReleaseMode {
 }
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-	r.GET("/swagger/*any", ginSwagger.WarpHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
 	v1.POST("/signUp", controller.SignUpHandler)
