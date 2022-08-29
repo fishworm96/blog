@@ -16,13 +16,13 @@ definitions:
     type: object
   models.ApiPostDetail:
     properties:
-      author_id:
-        type: integer
       author_name:
         type: string
       community_id:
+        description: 社区ID
         type: integer
       content:
+        description: 文章内容
         type: string
       create_time:
         type: string
@@ -32,12 +32,71 @@ definitions:
         type: string
       name:
         type: string
-      status:
-        type: integer
       title:
+        description: 文章标题
         type: string
       vote_num:
         type: integer
+    required:
+    - community_id
+    - content
+    - title
+    type: object
+  models.ParamLogin:
+    properties:
+      password:
+        description: 密码
+        type: string
+      username:
+        description: 用户名
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  models.ParamPost:
+    properties:
+      content:
+        description: 文章内容
+        type: string
+      title:
+        description: 文章标题
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  models.ParamSignUp:
+    properties:
+      password:
+        description: 密码
+        maxLength: 24
+        minLength: 6
+        type: string
+      re_password:
+        description: 重复密码
+        type: string
+      username:
+        description: 用户名
+        maxLength: 24
+        minLength: 6
+        type: string
+    required:
+    - password
+    - re_password
+    - username
+    type: object
+  models.Post:
+    properties:
+      community_id:
+        description: 社区ID
+        type: integer
+      content:
+        description: 文章内容
+        type: string
+      title:
+        description: 文章标题
+        type: string
     required:
     - community_id
     - content
@@ -52,11 +111,122 @@ info:
   title: blog项目接口文档
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 登录接口
+      parameters:
+      - description: 登录参数
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 登录接口
+      tags:
+      - 用户相关接口
+  /post:
+    get:
+      consumes:
+      - application/json
+      description: 获取帖子列表接口
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 获取帖子列表接口
+      tags:
+      - 帖子相关接口
+  /post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据帖子id获取帖子信息的接口
+      parameters:
+      - description: 查询帖子id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 帖子信息接口
+      tags:
+      - 帖子相关接口
+  /post/edit/{id}:
+    put:
+      description: 根据文章id来接收标题和内容修改帖子接口
+      parameters:
+      - description: Bearer JWT
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 文章id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 修改帖子内容
+        in: body
+        name: ParamPost
+        schema:
+          $ref: '#/definitions/models.ParamPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 更新帖子接口
+      tags:
+      - 帖子相关接口
+  /posts:
+    post:
+      consumes:
+      - application/json
+      description: 创建帖子接口
+      parameters:
+      - description: Bearer JWT
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 社区ID
+        in: body
+        name: PostParam
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 创建帖子接口
+      tags:
+      - 帖子相关接口
   /posts2:
     get:
       consumes:
       - application/json
-      description: 可按社区按时间或分数排序查询帖子列表接口
+      description: 可按社区时间或分数排序查询帖子列表接口
       parameters:
       - description: Bearer JWT
         in: header
@@ -93,5 +263,27 @@ paths:
       - ApiKeyAuth: []
       summary: 升级版帖子列表接口
       tags:
-      - 帖子相关接口(api分组展示使用的)
+      - 帖子相关接口
+  /signUp:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册接口
+      parameters:
+      - description: 注册参数
+        in: body
+        name: SignUp
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamSignUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 注册用户接口
+      tags:
+      - 用户相关接口
 swagger: "2.0"

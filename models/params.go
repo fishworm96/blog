@@ -7,21 +7,21 @@ const (
 )
 
 type ParamSignUp struct{
-	Username string `json:"username" binding:"required,max=24,min=6"`
-	Password string `json:"password" binding:"required,max=24,min=6"`
-	RePassword string `json:"re_password" binding:"required,eqfield=Password"`
+	Username string `json:"username" binding:"required,max=24,min=6"` // 用户名
+	Password string `json:"password" binding:"required,max=24,min=6"` // 密码
+	RePassword string `json:"re_password" binding:"required,eqfield=Password"` // 重复密码
 }
 
 // ParamLogin 登录请求参数
 type ParamLogin struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Username string `json:"username" binding:"required"` // 用户名
+	Password string `json:"password" binding:"required"` // 密码
 }
 
 // ParamPost
 type ParamPost struct {
-	Title string `json:"title" binding:"required"`
-	Content string `json:"content" binding:"required"`
+	Title string `json:"title" binding:"required"` // 文章标题
+	Content string `json:"content" binding:"required"` // 文章内容
 }
 
 // 帖子id和点赞两个参数
