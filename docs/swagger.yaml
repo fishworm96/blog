@@ -86,6 +86,22 @@ definitions:
     - re_password
     - username
     type: object
+  models.ParamVoteData:
+    properties:
+      direction:
+        description: 增长票1 还是返回票-1 取消票0
+        enum:
+        - 1
+        - 0
+        - -1
+        example: "0"
+        type: string
+      post_id:
+        description: UserID 从请求中获取当前的用户
+        type: string
+    required:
+    - post_id
+    type: object
   models.Post:
     properties:
       community_id:
@@ -165,6 +181,27 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 帖子信息接口
+      tags:
+      - 帖子相关接口
+  /post/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据帖子id删除帖子的接口
+      parameters:
+      - description: 删除文章帖子参数
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      summary: 删除帖子接口
       tags:
       - 帖子相关接口
   /post/edit/{id}:
@@ -286,4 +323,24 @@ paths:
       summary: 注册用户接口
       tags:
       - 用户相关接口
+  /vote:
+    post:
+      consumes:
+      - application/json
+      description: 根据帖子id和投票方向来投票的接口
+      parameters:
+      - description: 投票参数
+        in: body
+        name: ParamVoteData
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamVoteData'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 投票接口
+      tags:
+      - 投票相关接口
 swagger: "2.0"
