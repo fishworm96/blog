@@ -75,6 +75,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/post/delete/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "根据帖子id删除帖子的接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子相关接口"
+                ],
+                "summary": "删除帖子接口",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "删除文章帖子参数",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/post/edit/{id}": {
             "put": {
                 "security": [
@@ -296,6 +330,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/vote": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "根据帖子id和投票方向来投票的接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "投票相关接口"
+                ],
+                "summary": "投票接口",
+                "parameters": [
+                    {
+                        "description": "投票参数",
+                        "name": "ParamVoteData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ParamVoteData"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -416,6 +482,28 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 24,
                     "minLength": 6
+                }
+            }
+        },
+        "models.ParamVoteData": {
+            "type": "object",
+            "required": [
+                "post_id"
+            ],
+            "properties": {
+                "direction": {
+                    "description": "增长票1 还是返回票-1 取消票0",
+                    "type": "string",
+                    "enum": [
+                        1,
+                        0,
+                        -1
+                    ],
+                    "example": "0"
+                },
+                "post_id": {
+                    "description": "UserID 从请求中获取当前的用户",
+                    "type": "string"
                 }
             }
         },

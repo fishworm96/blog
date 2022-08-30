@@ -150,7 +150,16 @@ func UpdatePostHandler(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
-// DeletePostHandler 删除帖子
+// DeletePostHandler 删除帖子接口
+// @Summary 删除帖子接口
+// @Description 根据帖子id删除帖子的接口
+// @Tags 帖子相关接口
+// @Accept application/json
+// @Produce application/json
+// @Param id path int true "删除文章帖子参数"
+// @Security ApiKeyAuth
+// @Success 200
+// @Router /post/delete/{id} [delete]
 func DeletePostHandler(c *gin.Context) {
 	// 获取参数
 	pidStr := c.Param("id")
