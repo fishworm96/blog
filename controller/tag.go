@@ -56,6 +56,10 @@ func UpdateTagHandler(c *gin.Context) {
 	}
 	if err := logic.UpdateTag(tag); err != nil {
 		zap.L().Error("logic.UpdateTag(tag) failed", zap.Any("tid", tag), zap.Error(err))
+		if errors.Is(err, mysql.ErrorUpdateFailed) {
+			ResponseError(c, CodeUpdateFailed)
+			return
+		}
 		ResponseError(c, CodeUpdateFailed)
 		return
 	}
