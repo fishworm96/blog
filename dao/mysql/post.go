@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
+	"go.uber.org/zap"
 )
 
 // CreatePost 创建帖子
@@ -34,12 +35,20 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 func UpdatePost(pid int64, p *models.ParamPost) (err error) {
 	sqlStr := `update post set title = ?, content = ? where post_id = ?`
 	_, err = db.Exec(sqlStr, p.Title, p.Content, pid)
+	if err != nil {
+		zap.L().Error("Update failed", zap.Error(err))
+		return ErrorUpdateFailed
+	}
 	return
 }
 
 func DeletePostById(pid int64) (err error) {
 	sqlStr := `delete from post where post_id = ?`
 	_, err = db.Exec(sqlStr, pid)
+	if err != nil {
+		zap.L().Error("Delete failed", zap.Error(err))
+		return ErrorDeleteFailed
+	}
 	return
 }
 

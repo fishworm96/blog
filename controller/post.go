@@ -141,8 +141,8 @@ func UpdatePostHandler(c *gin.Context) {
 	}
 	// 修改帖子信息
 	if err := logic.UpdatePost(pid, p); err != nil {
-		zap.L().Error("logic.UpdatePost(p) failed", zap.Error(err))
-		ResponseError(c, CodeServerBusy)
+		zap.L().Error("logic.UpdatePost(p) failed",zap.Any("post", p), zap.Error(err))
+		ResponseError(c, CodeUpdateFailed)
 		return
 	}
 
@@ -171,9 +171,9 @@ func DeletePostHandler(c *gin.Context) {
 	}
 	// 根据id删除文章
 	if err := logic.DeletePostById(pid); err != nil {
-		zap.L().Error("logic.DeletePostById(pid) failed", zap.Error(err))
-		ResponseError(c, CodeServerBusy)
-		return
+		zap.L().Error("logic.DeletePostById(pid) failed",zap.Int64("pid", pid), zap.Error(err))
+			ResponseError(c, CodeDeleteFailed)
+			return
 	}
 	// 返回响应
 	ResponseSuccess(c, nil)

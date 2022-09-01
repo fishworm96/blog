@@ -9,8 +9,10 @@ const (
 	CodeUserExist
 	CodeInvalidPassword
 	CodeServerBusy
-	COdeTagExist
-
+	CodeUpdateFailed
+	CodeDeleteFailed
+	CodeTagExist
+	CodeTagNotExist
 	CodeNeedLogin
 	CodeInvalidToken
 )
@@ -21,7 +23,10 @@ var codeMsgMap = map[ResCode]string{
 	CodeUserExist: "用户名已存在",
 	CodeInvalidPassword: "用户名或密码错误",
 	CodeServerBusy: "服务繁忙",
-	COdeTagExist: "标签已存在",
+	CodeUpdateFailed: "修改失败",
+	CodeDeleteFailed: "删除失败",
+	CodeTagExist: "标签已存在",
+	CodeTagNotExist: "标签不存在",
 	CodeNeedLogin: "需要登录",
 	CodeInvalidToken: "无效的token",
 }
