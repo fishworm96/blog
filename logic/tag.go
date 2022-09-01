@@ -24,3 +24,7 @@ func UpdateTag(tag *models.Tag) error {
 	}
 	return mysql.UpdateTag(tag)
 }
+
+func DeleteTagById(tid int64) error {
+	return mysql.DeleteTagById(tid)
+}

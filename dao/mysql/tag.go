@@ -39,6 +39,32 @@ func GetTagList() (tags []*models.Tag, err error) {
 // UpdateTag 更新数据库标签名称
 func UpdateTag(tag *models.Tag) (err error) {
 	sqlStr := `update tag set tag_name = ? where id = ?`
-	_, err = db.Exec(sqlStr, tag.Name, tag.Id)
+	ret, err := db.Exec(sqlStr, tag.Name, tag.Id)
+	if err != nil {
+		zap.L().Error("Update failed", zap.Error(err))
+		return ErrorUpdateFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorUpdateFailed
+	}
 	return err
+}
+
+// DeleteTagById 根据id删除标签
+func DeleteTagById(tid int64) (err error) {
+	sqlStr := `delete from tag where id = ?`
+	ret, err := db.Exec(sqlStr, tid)
+	if err != nil {
+		zap.L().Error("there delete is failed", zap.Error(err))
+		return ErrorDeleteFailed
+	}
+	n, err := ret.RowsAffected() // 操作影响的行数
+	if n == 0 {
+		return ErrorTagNotExist
+	}
+	if err != nil {
+		return err
+	}
+	return
 }

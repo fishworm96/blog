@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"blog/dao/mysql"
 	"blog/logic"
 	"blog/models"
+	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -25,7 +28,7 @@ func CreateTagHandler(c *gin.Context) {
 	
 	if err := logic.CreateTag(tag); err != nil {
 		zap.L().Error("logic.CreateTag(name) failed", zap.Error(err))
-		ResponseError(c, COdeTagExist)
+		ResponseError(c, CodeTagExist)
 		return
 	}
 
@@ -52,8 +55,30 @@ func UpdateTagHandler(c *gin.Context) {
 		return
 	}
 	if err := logic.UpdateTag(tag); err != nil {
-		zap.L().Error("logic.UpdateTag(tag) failed", zap.Error(err))
-		ResponseError(c, CodeServerBusy)
+		zap.L().Error("logic.UpdateTag(tag) failed", zap.Any("tid", tag), zap.Error(err))
+		ResponseError(c, CodeUpdateFailed)
+		return
+	}
+	ResponseSuccess(c, nil)
+}
+
+// DeleteTagHandler 删除标签接口
+func DeleteTagHandler(c *gin.Context) {
+	tidStr := c.Param("id")
+	tid, err := strconv.ParseInt(tidStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete tag with invalid param", zap.Int64("tid", tid), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	// 根据id删除标签
+	if err := logic.DeleteTagById(tid); err != nil {
+		zap.L().Error("logic.DeleteTagById(tid) failed", zap.Int64("tid", tid), zap.Error(err))
+		if errors.Is(err, mysql.ErrorTagNotExist) {
+			ResponseError(c, CodeTagNotExist)
+			return
+		}
+		ResponseError(c, CodeDeleteFailed)
 		return
 	}
 	ResponseSuccess(c, nil)
