@@ -42,6 +42,7 @@ if mode == gin.ReleaseMode {
 	}
 	{
 		v1.POST("/tag", controller.CreateTagHandler)
+		v1.PUT("/tag/edit", controller.UpdateTagHandler)
 	}
 	return r
 }

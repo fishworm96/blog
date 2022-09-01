@@ -42,3 +42,19 @@ func GetTagListHandler(c *gin.Context) {
 	}
 	ResponseSuccess(c, data)
 }
+
+// UpdateTagHandler 修改标签
+func UpdateTagHandler(c *gin.Context) {
+	tag := new(models.Tag)
+	if err := c.ShouldBindJSON(tag); err != nil {
+		zap.L().Error("update tag with param", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	if err := logic.UpdateTag(tag); err != nil {
+		zap.L().Error("logic.UpdateTag(tag) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
+}

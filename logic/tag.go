@@ -6,9 +6,21 @@ import (
 )
 
 func CreateTag(tag *models.Tag) error {
+	// 判断标签是否存在
+	if err := mysql.CheckTagExist(tag.Name); err != nil {
+		return err
+	}
 	return mysql.CreateTag(tag.Name)
 }
 
 func GetTagList() (data []*models.Tag, err error) {
 	return mysql.GetTagList()
+}
+
+func UpdateTag(tag *models.Tag) error {
+	// 判断标签是否存在
+	if err := mysql.CheckTagExist(tag.Name); err != nil {
+		return err
+	}
+	return mysql.UpdateTag(tag)
 }
