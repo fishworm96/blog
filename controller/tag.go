@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// CreateTagHandler 创建标签接口
 func CreateTagHandler(c *gin.Context) {
 	tag := new(models.Tag)
 	if err := c.ShouldBindJSON(tag); err != nil {
@@ -29,4 +30,15 @@ func CreateTagHandler(c *gin.Context) {
 	}
 
 	ResponseSuccess(c, nil)
+}
+
+// GetTagHandler 获取标签列表接口
+func GetTagListHandler(c *gin.Context) {
+	data, err := logic.GetTagList()
+	if err != nil {
+		zap.L().Error("logic.GetTag() failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
 }

@@ -30,6 +30,7 @@ if mode == gin.ReleaseMode {
 	v1.GET("/post", controller.GetPostListHandler)
 	v1.GET("/post/:id", controller.GetPostDetailHandler)
 	v1.GET("/posts2", controller.GetPostListHandler2)
+	v1.GET("/tag", controller.GetTagListHandler)
 	
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
@@ -41,7 +42,6 @@ if mode == gin.ReleaseMode {
 	}
 	{
 		v1.POST("/tag", controller.CreateTagHandler)
-		
 	}
 	return r
 }
