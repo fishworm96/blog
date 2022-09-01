@@ -11,6 +11,7 @@ type Post struct {
 	Title string `json:"title" db:"title" binding:"required"` // 文章标题
 	Content string `json:"content" db:"content" binding:"required"` // 文章内容
 	CreateTime time.Time `json:"create_time" db:"create_time" swaggerignore:"true"`
+	UpdateTime time.Time `json:"update_time" db:"update_time" swaggerignore:"true"`
 }
 
 // ApiPostDetail 帖子详情接口的结构体
