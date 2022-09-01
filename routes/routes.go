@@ -37,6 +37,11 @@ if mode == gin.ReleaseMode {
 		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
 		v1.DELETE("/post/delete/:id", controller.DeletePostHandler)
 		v1.POST("/vote", controller.PostVoteController)
+
+	}
+	{
+		v1.POST("/tag", controller.CreateTagHandler)
+		
 	}
 	return r
 }
