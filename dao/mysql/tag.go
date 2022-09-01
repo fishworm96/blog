@@ -46,7 +46,7 @@ func UpdateTag(tag *models.Tag) (err error) {
 	}
 	n, err := ret.RowsAffected()
 	if n == 0 {
-		return ErrorUpdateFailed
+		return ErrorTagNotExist
 	}
 	return err
 }

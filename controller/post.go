@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"blog/dao/mysql"
 	"blog/logic"
 	"blog/models"
+	"errors"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -103,7 +105,7 @@ func GetPostListHandler(c *gin.Context) {
 		return
 	}
 	// 返回响应
-	ResponseSuccess(c, data )
+	ResponseSuccess(c, data)
 }
 
 // UpdatePostHandler 更新帖子
@@ -123,7 +125,7 @@ func UpdatePostHandler(c *gin.Context) {
 	pidStr := c.Param("id")
 	pid, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
-		zap.L().Error("update post with param", zap.Int64("pid",pid), zap.Error(err))
+		zap.L().Error("update post with param", zap.Int64("pid", pid), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
@@ -141,7 +143,11 @@ func UpdatePostHandler(c *gin.Context) {
 	}
 	// 修改帖子信息
 	if err := logic.UpdatePost(pid, p); err != nil {
-		zap.L().Error("logic.UpdatePost(p) failed",zap.Any("post", p), zap.Error(err))
+		zap.L().Error("logic.UpdatePost(p) failed", zap.Any("post", p), zap.Error(err))
+		if errors.Is(err, mysql.ErrorPostNotExist) {
+			ResponseError(c, CodePostNotExist)
+			return
+		}
 		ResponseError(c, CodeUpdateFailed)
 		return
 	}
@@ -165,15 +171,19 @@ func DeletePostHandler(c *gin.Context) {
 	pidStr := c.Param("id")
 	pid, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
-		zap.L().Error("delete post with invalid param",zap.Int64("pid", pid), zap.Error(err))
-			ResponseError(c, CodeInvalidParam)
-			return
+		zap.L().Error("delete post with invalid param", zap.Int64("pid", pid), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
 	}
 	// 根据id删除文章
 	if err := logic.DeletePostById(pid); err != nil {
-		zap.L().Error("logic.DeletePostById(pid) failed",zap.Int64("pid", pid), zap.Error(err))
-			ResponseError(c, CodeDeleteFailed)
+		zap.L().Error("logic.DeletePostById(pid) failed", zap.Int64("pid", pid), zap.Error(err))
+		if errors.Is(err, mysql.ErrorPostNotExist) {
+			ResponseError(c, CodePostNotExist)
 			return
+		}
+		ResponseError(c, CodeDeleteFailed)
+		return
 	}
 	// 返回响应
 	ResponseSuccess(c, nil)
@@ -193,8 +203,8 @@ func DeletePostHandler(c *gin.Context) {
 func GetPostListHandler2(c *gin.Context) {
 	// 定义默认参数，如果没有传参数就用默认参数
 	p := &models.ParamPostList{
-		Page: 1,
-		Size: 10,
+		Page:  1,
+		Size:  10,
 		Order: models.OrderTime, // magic string
 	}
 	if err := c.ShouldBindQuery(p); err != nil {
@@ -209,7 +219,7 @@ func GetPostListHandler2(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	
+
 	// 返回响应
 	ResponseSuccess(c, data)
 }

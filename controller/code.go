@@ -11,6 +11,7 @@ const (
 	CodeServerBusy
 	CodeUpdateFailed
 	CodeDeleteFailed
+	CodePostNotExist
 	CodeTagExist
 	CodeTagNotExist
 	CodeNeedLogin
@@ -25,6 +26,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeServerBusy: "服务繁忙",
 	CodeUpdateFailed: "修改失败",
 	CodeDeleteFailed: "删除失败",
+	CodePostNotExist: "帖子不存在",
 	CodeTagExist: "标签已存在",
 	CodeTagNotExist: "标签不存在",
 	CodeNeedLogin: "需要登录",

@@ -34,20 +34,28 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 // UpdatePost 更新文章信息
 func UpdatePost(pid int64, p *models.ParamPost) (err error) {
 	sqlStr := `update post set title = ?, content = ? where post_id = ?`
-	_, err = db.Exec(sqlStr, p.Title, p.Content, pid)
+	ret, err := db.Exec(sqlStr, p.Title, p.Content, pid)
 	if err != nil {
 		zap.L().Error("Update failed", zap.Error(err))
 		return ErrorUpdateFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorPostNotExist
 	}
 	return
 }
 
 func DeletePostById(pid int64) (err error) {
 	sqlStr := `delete from post where post_id = ?`
-	_, err = db.Exec(sqlStr, pid)
+	ret, err := db.Exec(sqlStr, pid)
 	if err != nil {
 		zap.L().Error("Delete failed", zap.Error(err))
 		return ErrorDeleteFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorPostNotExist
 	}
 	return
 }
