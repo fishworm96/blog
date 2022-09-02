@@ -70,10 +70,15 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 			zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID), failed", zap.Int64("post.CommunityID", post.CommunityID))
 			continue
 		}
+		tags, err := mysql.GetTagByPostId(post.ID)
+		if err != nil {
+			return nil, err
+		}
 		postDetail := &models.ApiPostDetail{
 			AuthorName:      user.Username,
 			Post:            post,
 			CommunityDetail: community,
+			Tag: tags,
 		}
 		data = append(data, postDetail)
 	}
