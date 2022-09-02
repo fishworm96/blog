@@ -46,6 +46,19 @@ func GetTagListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+// GetTagDetailHandler 根据标签name获取标签信息接口
+func GetTagDetailHandler(c *gin.Context) {
+	name := c.Param("name")
+	page, size := getPageInfo(c)
+	data, err := logic.GetTagByName(name, page, size)
+	if err != nil {
+		zap.L().Error("logic.GetTagById(tid) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
+}
+
 // UpdateTagHandler 修改标签
 func UpdateTagHandler(c *gin.Context) {
 	tag := new(models.Tag)

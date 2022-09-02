@@ -36,6 +36,46 @@ func GetTagList() (tags []*models.Tag, err error) {
 	return
 }
 
+func GetTagByName(name string) (tag *models.Tag, err error) {
+	tag = new(models.Tag)
+	sqlStr := `select id, tag_name from tag where tag_name = ?`
+	if err = db.Get(tag, sqlStr, name); err != nil {
+		zap.L().Error("there is no tag in db", zap.String("name", name), zap.Error(err))
+		err = nil
+	}
+	return
+}
+
+func GetTagByPostId(pid int64) (tags []*models.Tag, err error) {
+	sqlStr := `
+	select distinct tag.id, tag.tag_name
+	FROM post
+	INNER JOIN post_tag on ? = post_tag.post_id
+	INNER JOIN tag on post_tag.tag_name = tag.tag_name
+	`
+	if err = db.Select(&tags, sqlStr, pid); err != nil {
+		zap.L().Error("there is no tag in db", zap.Int64("pid", pid), zap.Error(err))
+		err = nil
+	}
+	return
+}
+
+func GetPostByTagName(name string, page, size int64) (posts []*models.Post, err error) {
+	sqlStr := `
+	select p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time 
+	from post p
+	inner join post_tag on p.post_id = post_tag.post_id
+	inner join tag on post_tag.tag_name = ?
+	order by create_time desc limit ?, ?
+	`
+	posts = make([]*models.Post, 0, 2)
+	if err = db.Select(&posts, sqlStr, name, (page-1)*size, size); err != nil {
+		zap.L().Error("there is no post in db", zap.String("name", name), zap.Error(err))
+		err = nil
+	}
+	return
+}
+
 // UpdateTag 更新数据库标签名称
 func UpdateTag(tag *models.Tag) (err error) {
 	sqlStr := `update tag set tag_name = ? where id = ?`

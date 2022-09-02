@@ -78,6 +78,10 @@ func GetPostDetailHandler(c *gin.Context) {
 	data, err := logic.GetPostById(pid)
 	if err != nil {
 		zap.L().Error("logic.GetPostById(pid) failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorPostNotExist) {
+			ResponseError(c, CodePostNotExist)
+			return
+		}
 		ResponseError(c, CodeServerBusy)
 		return
 	}
