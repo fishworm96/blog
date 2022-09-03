@@ -9,6 +9,7 @@ const (
 	CodeUserExist
 	CodeInvalidPassword
 	CodeServerBusy
+	CodeAddFailed
 	CodeUpdateFailed
 	CodeDeleteFailed
 	CodePostNotExist
@@ -24,6 +25,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeUserExist: "用户名已存在",
 	CodeInvalidPassword: "用户名或密码错误",
 	CodeServerBusy: "服务繁忙",
+	CodeAddFailed: "添加失败",
 	CodeUpdateFailed: "修改失败",
 	CodeDeleteFailed: "删除失败",
 	CodePostNotExist: "帖子不存在",

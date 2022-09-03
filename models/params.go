@@ -37,3 +37,8 @@ type ParamPostList struct {
 	Size int64 `json:"size" form:"size" example:"1"` // 每页数据量
 	Order string `json:"order" form:"order" example:"score"` // 排序依据
 }
+
+type ParamPostAndTag struct {
+	Id int64 `json:"id" binding:"required"`
+	Name string `json:"name" binding:"required"`
+}

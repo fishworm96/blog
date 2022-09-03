@@ -7,6 +7,7 @@ var (
 	ErrorUserNotExist = errors.New("用户不存在")
 	ErrorInvalidPassword = errors.New("用户或密码错误")
 	ErrorInvalidID = errors.New("无效的ID")
+	ErrorAddFailed = errors.New("添加失败")
 	ErrorUpdateFailed = errors.New("更新失败")
 	ErrorDeleteFailed = errors.New("删除失败")
 	ErrorPostNotExist = errors.New("帖子不存在")

@@ -21,6 +21,10 @@ func CreatePost(p *models.Post) (err error) {
 	return
 }
 
+func AddPostTag(postTag *models.ParamPostAndTag) error {
+	return mysql.AddPostTag(postTag)
+}
+
 // GetPostById 根据帖子id查询帖子详情数据
 func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 	// 查询并组合我们接口想要的数据

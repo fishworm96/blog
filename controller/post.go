@@ -55,6 +55,32 @@ func CreatePostHandler(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
+func AddPostTagHandler(c *gin.Context) {
+	postTag := new(models.ParamPostAndTag)
+	if err := c.ShouldBindJSON(postTag); err != nil {
+		zap.L().Error("create post with invalid param")
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	if err := logic.AddPostTag(postTag); err != nil {
+		zap.L().Error("logic.AddPostTag(postTag) failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorAddFailed) {
+			ResponseError(c, CodeAddFailed)
+			return
+		}
+		ResponseError(c, CodeAddFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
 // GetPostDetailHandler 根据帖子id获取帖子信息
 // @Summary 帖子信息接口
 // @Description 根据帖子id获取帖子信息的接口
