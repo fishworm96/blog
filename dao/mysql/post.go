@@ -15,6 +15,30 @@ func CreatePost(p *models.Post) (err error) {
 	return
 }
 
+func AddPostTag(postTag *models.ParamPostAndTag) (err error) {
+	sqlStr := `
+	insert into post_tag(post_id, tag_name)
+	SELECT ?, ?
+	from DUAL
+	where EXISTS (
+		select post.post_id, tag.tag_name 
+		from post, tag 
+		where post.post_id = ? 
+		and tag.tag_name = ?
+		)
+		`
+	ret, err := db.Exec(sqlStr, postTag.Id, postTag.Name, postTag.Id, postTag.Name)
+	if err != nil {
+		zap.L().Error("add post tag failed", zap.Error(err))
+		return ErrorAddFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorAddFailed
+	}
+	return
+}
+
 // GetPostById 根据帖子id获取信息
 func GetPostById(pid int64) (post *models.Post, err error) {
 	post = new(models.Post)

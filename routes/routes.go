@@ -36,6 +36,7 @@ if mode == gin.ReleaseMode {
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler)
+		v1.POST("/post/addPostTag", controller.AddPostTagHandler)
 		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
 		v1.DELETE("/post/delete/:id", controller.DeletePostHandler)
 		v1.POST("/vote", controller.PostVoteController)
