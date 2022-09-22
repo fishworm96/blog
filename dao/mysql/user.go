@@ -2,12 +2,14 @@ package mysql
 
 import (
 	"blog/models"
-	"crypto/md5"
+	// "crypto/md5"
 	"database/sql"
-	"encoding/hex"
+	// "encoding/hex"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
-const secret = "12345"
+// const secret = "12345"
 
 // CheckUserExist 检查指定用户的用户名是否存在
 func CheckUserExist(username string) (err error) {
@@ -32,9 +34,13 @@ func InsertUser(user *models.User) (err error) {
 }
 
 func encryptPassword(oPassword string) string {
-	h := md5.New()
-	h.Write([]byte(secret))
-	return hex.EncodeToString(h.Sum([]byte(oPassword)))
+	password := []byte(oPassword)
+	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	return string(hashedPassword)
+	// h := md5.New()
+	// h.Write([]byte(secret))
+	// return hex.EncodeToString(h.Sum([]byte(oPassword)))
+
 }
 
 // Login 查询数据库判断账号和密码是否正确
@@ -50,10 +56,14 @@ func Login(user *models.User) (err error) {
 		return err
 	}
 	// 判断密码是否正确
-	password := encryptPassword(oPassword)
-	if password != user.Password {
+	// password := encryptPassword(oPassword)
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(oPassword))
+	if err != nil {
 		return ErrorInvalidPassword
 	}
+	// if password != user.Password {
+	// 	return ErrorInvalidPassword
+	// }
 	return
 }
 
