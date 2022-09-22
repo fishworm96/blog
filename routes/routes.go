@@ -15,11 +15,11 @@ import (
 
 func Setup(mode string) *gin.Engine {
 	// 判断模式
-if mode == gin.ReleaseMode {
-	gin.SetMode(gin.ReleaseMode) // gin设置成发布模式
-}
+	if mode == gin.ReleaseMode {
+		gin.SetMode(gin.ReleaseMode) // gin设置成发布模式
+	}
 	r := gin.New()
-	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.Cors())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
@@ -32,7 +32,7 @@ if mode == gin.ReleaseMode {
 	v1.GET("/posts2", controller.GetPostListHandler2)
 	v1.GET("/tag", controller.GetTagListHandler)
 	v1.GET("/tag/:name", controller.GetTagDetailHandler)
-	
+
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler)
@@ -44,7 +44,7 @@ if mode == gin.ReleaseMode {
 	{
 		v1.POST("/tag", controller.CreateTagHandler)
 		v1.PUT("/tag/edit", controller.UpdateTagHandler)
-		v1.DELETE("/tag/delete/:id", controller.DeleteTagHandler)
+		v1.DELETE("/tag/delete/:ids", controller.DeleteTagHandler)
 	}
 	return r
 }
