@@ -35,6 +35,7 @@ func Setup(mode string) *gin.Engine {
 
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
+		v1.GET("/info", controller.GetUserInfoHandler)
 		v1.POST("/post", controller.CreatePostHandler)
 		v1.POST("/post/addPostTag", controller.AddPostTagHandler)
 		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
