@@ -96,12 +96,8 @@ func GetUserInfoHandler(c *gin.Context) {
 	}
 	data, err := logic.GetUserInfoByUserIdHandler(userID)
 	if err != nil {
-		zap.L().Error("logic.GetUserInfoById failed", zap.Error(err))
-		if errors.Is(err, mysql.ErrorPostNotExist) {
-			ResponseError(c, CodePostNotExist)
-			return
-		}
-		ResponseError(c, CodeServerBusy)
+		zap.L().Error("logic.GetUserInfoHandler failed", zap.Error(err))
+		ResponseError(c, CodeNeedLogin)
 		return
 	}
 	ResponseSuccess(c, data)
