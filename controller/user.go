@@ -82,6 +82,27 @@ func LoginHandler(c *gin.Context) {
 		ResponseError(c, CodeInvalidPassword)
 		return
 	}
+	data := make(map[string]string)
+	data["token"] = token
 	// 返回响应
-	ResponseSuccess(c, token)
+	ResponseSuccess(c, data)
+}
+
+func GetUserInfoHandler(c *gin.Context) {
+	userID, err := getCurrentUserID(c)
+	if err != nil {
+		ResponseError(c, CodeNeedLogin)
+		return
+	}
+	data, err := logic.GetUserInfoByUserIdHandler(userID)
+	if err != nil {
+		zap.L().Error("logic.GetUserInfoById failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorPostNotExist) {
+			ResponseError(c, CodePostNotExist)
+			return
+		}
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
 }

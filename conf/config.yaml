@@ -1,6 +1,6 @@
 name: "blog"
 mode: "dev"
-port: 8081
+port: 8080
 version: "v0.1.4"
 start_time: "2022-07-01"
 machine_id: 1
