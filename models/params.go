@@ -42,3 +42,21 @@ type ParamPostAndTag struct {
 	Id int64 `json:"id" binding:"required"`
 	Name string `json:"name" binding:"required"`
 }
+
+
+type ParamMenu struct {
+	Title string `json:"title" db:"title" binding:"required"`
+	Icon string `json:"icon" db:"icon"`
+	Path string `json:"path" db:"path" binding:"required"`
+	Type int64 `json:"type" db:"type" binding:"required"`
+	ModuleId int64 `json:"module_id" db:"module_id" binding:"required"`
+}
+
+type ParamUpdateMenu struct {
+	Id int64 `json:"id" db:"id" binding:"required"`
+	Type int64 `json:"type" db:"type" binding:"required"`
+	ModuleId int64 `json:"module_id" db:"module_id" binding:"required"`
+	Title string `json:"title" db:"title" binding:"required"`
+	Icon string `json:"icon" db:"icon"`
+	Path string `json:"path" db:"path" binding:"required"`
+}
