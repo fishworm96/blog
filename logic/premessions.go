@@ -31,3 +31,7 @@ func GetMenuList() (data []*models.MenuDetail, err error) {
 	}
 	return
 }
+
+func AddMenu(m *models.Menu) error {
+	return mysql.AddMenu(m)
+}
