@@ -24,3 +24,19 @@ func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetail, err e
 	}
 	return
 }
+
+func AddMenu(m *models.Menu) (err error) {
+	sqlStr := `
+		insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)
+	`
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleId)
+	if err != nil {
+		zap.L().Error("add menu failed", zap.Error(err))
+		return ErrorAddFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorAddFailed
+	}
+	return
+}
