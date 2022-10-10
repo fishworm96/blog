@@ -38,7 +38,7 @@ func Setup(mode string) *gin.Engine {
 		v1.GET("/info", controller.GetUserInfoHandler)
 	}
 	{
-		v1.GET("/menu", controller.GetMenuHandler)
+		v1.GET("/menus", controller.GetMenuListHandler)
 		v1.POST("/menu", controller.AddMenuHandler)
 		v1.PUT("/menu", controller.UpdateMenuHandler)
 	}

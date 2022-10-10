@@ -10,10 +10,10 @@ import (
 )
 
 // 获取菜单列表
-func GetMenuHandler(c *gin.Context) {
+func GetMenuListHandler(c *gin.Context) {
 	data, err := logic.GetMenuList()
 	if err != nil {
-		zap.L().Error("logic.GetMenuHandler() failed", zap.Error(err))
+		zap.L().Error("logic.GetMenuListHandler() failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
