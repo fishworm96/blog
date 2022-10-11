@@ -3,6 +3,7 @@ package controller
 import (
 	"blog/logic"
 	"blog/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -17,6 +18,24 @@ func GetMenuListHandler(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
+	ResponseSuccess(c, data)
+}
+
+func GetMenuHandler(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("get id not in menu", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	data, err := logic.GetMenu(id)
+	if err != nil {
+		zap.L().Error("logic.GetMenu() failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+
 	ResponseSuccess(c, data)
 }
 
