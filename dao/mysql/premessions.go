@@ -27,6 +27,13 @@ func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetail, err e
 	return
 }
 
+func GetMenu(id int64) (menu *models.MenuDetail, err error) {
+	menu = new(models.MenuDetail)
+	sqlStr := `select id, title, icon, path, module_id from access where id = ?`
+	err = db.Get(menu, sqlStr, id)
+	return
+}
+
 // 添加菜单
 func AddMenu(m *models.ParamMenu) (err error) {
 	sqlStr := `insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)`
