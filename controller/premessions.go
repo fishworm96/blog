@@ -25,7 +25,7 @@ func GetMenuHandler(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		zap.L().Error("get id not in menu", zap.Int64("id", id), zap.Error(err))
+		zap.L().Error("get menu detail with invalid param", zap.Int64("id", id), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
@@ -83,6 +83,30 @@ func UpdateMenuHandler(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("logic.UpdateMenu(m) failed", zap.Error(err))
 		ResponseError(c, CodeUpdateFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
+// 删除菜单
+func DeleteMenuHandler(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete post detail with invalid param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	state, err := logic.DeleteMenu(id)
+	if err != nil {
+		zap.L().Error("logic.DeleteMenu(id) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	if !state {
+		ResponseError(c, CodeDeleteFailed)
 		return
 	}
 

@@ -42,6 +42,7 @@ func Setup(mode string) *gin.Engine {
 		v1.GET("/menu/:id", controller.GetMenuHandler)
 		v1.POST("/menu", controller.AddMenuHandler)
 		v1.PUT("/menu", controller.UpdateMenuHandler)
+		v1.DELETE("/menu/:id", controller.DeleteMenuHandler)
 	}
 	{
 		v1.POST("/post", controller.CreatePostHandler)

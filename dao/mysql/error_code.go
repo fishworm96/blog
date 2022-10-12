@@ -13,4 +13,5 @@ var (
 	ErrorPostNotExist = errors.New("帖子不存在")
 	ErrorTagExist = errors.New("标签已存在")
 	ErrorTagNotExist = errors.New("标签不存在")
+	ErrorMenuNotExist = errors.New("菜单不存在")
 )
