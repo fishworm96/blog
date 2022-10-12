@@ -62,3 +62,17 @@ func UpdateMenuById(m *models.ParamUpdateMenu) (err error) {
 	}
 	return
 }
+
+func DeleteMenuById(id int64) (err error) {
+	sqlStr := `delete from access where id = ?`
+	ret, err := db.Exec(sqlStr, id)
+	if err != nil {
+		zap.L().Error("Delete failed", zap.Error(err))
+		return ErrorDeleteFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorMenuNotExist
+	}
+	return
+}

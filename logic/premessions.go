@@ -43,3 +43,20 @@ func AddMenu(m *models.ParamMenu) error {
 func UpdateMenu(m *models.ParamUpdateMenu) error {
 	return mysql.UpdateMenuById(m)
 }
+
+func DeleteMenu(id int64) (state bool, err error) {
+	m, err := mysql.GetMenu(id)
+	if err != nil {
+		zap.L().Error("mysql.GetMenu(id) failed", zap.Int64("id", id), zap.Error(err))
+		return
+	}
+	menu, err := mysql.GetChildrenMenuListByMenuId(m.Id)
+	if err != nil {
+		zap.L().Error("mysql.GetMenu(id) failed", zap.Int64("id", id), zap.Error(err))
+		return
+	}
+	if menu != nil {
+		return false, err
+	}
+	return true, mysql.DeleteMenuById(id)
+}
