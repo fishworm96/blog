@@ -35,28 +35,26 @@ func Setup(mode string) *gin.Engine {
 
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
-		{
-			v1.GET("/role", controller.GetRoleInfoHandler)
-		}
-		{
-			v1.GET("/menu", controller.GetMenuListHandler)
-			v1.GET("/menu/:id", controller.GetMenuHandler)
-			v1.POST("/menu", controller.AddMenuHandler)
-			v1.PUT("/menu", controller.UpdateMenuHandler)
-			v1.DELETE("/menu/:id", controller.DeleteMenuHandler)
-		}
-		{
-			v1.POST("/post", controller.CreatePostHandler)
-			v1.POST("/post/addPostTag", controller.AddPostTagHandler)
-			v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
-			v1.DELETE("/post/delete/:id", controller.DeletePostHandler)
-			v1.POST("/vote", controller.PostVoteController)
-		}
-		{
-			v1.POST("/tag", controller.CreateTagHandler)
-			v1.PUT("/tag/edit", controller.UpdateTagHandler)
-			v1.DELETE("/tag/delete/:ids", controller.DeleteTagHandler)
-		}
+		v1.GET("/role", controller.GetRoleInfoHandler)
+	}
+	{
+		v1.GET("/menu", controller.GetMenuListHandler)
+		v1.GET("/menu/:id", controller.GetMenuHandler)
+		v1.POST("/menu", controller.AddMenuHandler)
+		v1.PUT("/menu", controller.UpdateMenuHandler)
+		v1.DELETE("/menu/:id", controller.DeleteMenuHandler)
+	}
+	{
+		v1.POST("/post", controller.CreatePostHandler)
+		v1.POST("/post/addPostTag", controller.AddPostTagHandler)
+		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
+		v1.DELETE("/post/delete/:id", controller.DeletePostHandler)
+		v1.POST("/vote", controller.PostVoteController)
+	}
+	{
+		v1.POST("/tag", controller.CreateTagHandler)
+		v1.PUT("/tag/edit", controller.UpdateTagHandler)
+		v1.DELETE("/tag/delete/:ids", controller.DeleteTagHandler)
 	}
 	return r
 }
