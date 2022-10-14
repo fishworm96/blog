@@ -74,12 +74,3 @@ func GetUserById(uid int64) (user *models.User, err error) {
 	err = db.Get(user, sqlStr, uid)
 	return
 }
-
-func GetRoleHandler(uid int64) (role *models.Role, err error) {
-	role = new(models.Role)
-	sqlStr := `select role_id, title, description from role where role_id = (
-		select role_id from user where user_id = ?
-	)`
-	err = db.Get(role, sqlStr, uid)
-	return
-}

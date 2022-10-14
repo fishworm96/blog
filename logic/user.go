@@ -5,8 +5,6 @@ import (
 	"blog/models"
 	"blog/pkg/jwt"
 	"blog/pkg/snowflake"
-
-	"go.uber.org/zap"
 )
 
 func SignUp(p *models.ParamSignUp) (err error) {
@@ -17,7 +15,7 @@ func SignUp(p *models.ParamSignUp) (err error) {
 	// 生成UID
 	userID := snowflake.GenID()
 	user := &models.User{
-		UserID: userID,
+		UserID:   userID,
 		Username: p.Username,
 		Password: p.Password,
 	}
@@ -36,21 +34,4 @@ func Login(p *models.ParamLogin) (token string, err error) {
 	}
 	// 返回token
 	return jwt.GenToken(user.UserID, user.Username)
-}
-
-func GetUserInfoByUserIdHandler(uid int64) (data *models.UserInfo, err error) {
-	user, err := mysql.GetUserById(uid)
-	if err != nil {
-		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
-	}
-	role, err := mysql.GetRoleHandler(uid)
-	if err != nil {
-		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
-	}
-	data = &models.UserInfo{
-		Username: user.Username,
-		Title: role.Title,
-		Description: role.Description,
-	}
-	return
 }

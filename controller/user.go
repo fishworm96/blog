@@ -87,18 +87,3 @@ func LoginHandler(c *gin.Context) {
 	// 返回响应
 	ResponseSuccess(c, data)
 }
-
-func GetUserInfoHandler(c *gin.Context) {
-	userID, err := getCurrentUserID(c)
-	if err != nil {
-		ResponseError(c, CodeNeedLogin)
-		return
-	}
-	data, err := logic.GetUserInfoByUserIdHandler(userID)
-	if err != nil {
-		zap.L().Error("logic.GetUserInfoHandler failed", zap.Error(err))
-		ResponseError(c, CodeNeedLogin)
-		return
-	}
-	ResponseSuccess(c, data)
-}
