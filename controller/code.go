@@ -17,6 +17,7 @@ const (
 	CodeTagNotExist
 	CodeNeedLogin
 	CodeInvalidToken
+	CodeFileSuffixNotLegal
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -34,6 +35,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeTagNotExist: "标签不存在",
 	CodeNeedLogin: "需要登录",
 	CodeInvalidToken: "无效的token",
+	CodeFileSuffixNotLegal: "文件后缀名不合法",
 }
 
 func (c ResCode) Msg() string {

@@ -20,6 +20,9 @@ func Setup(mode string) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.Cors())
+
+	r.Static("/static", "./static")
+	
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
@@ -34,6 +37,9 @@ func Setup(mode string) *gin.Engine {
 	v1.GET("/tag/:name", controller.GetTagDetailHandler)
 
 	v1.Use(middlewares.JWTAuthMiddleware())
+	{
+		v1.PATCH("/upload", controller.UploadImage)
+	}
 	{
 		v1.GET("/role", controller.GetRoleInfoHandler)
 	}

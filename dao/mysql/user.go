@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	// "encoding/hex"
 
+	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -73,4 +74,18 @@ func GetUserById(uid int64) (user *models.User, err error) {
 	sqlStr := `select user_id, username from user where user_id = ?`
 	err = db.Get(user, sqlStr, uid)
 	return
+}
+
+func EditAvatar(dst string, userId int64) error {
+	sqlStr := `update user set avatar = ? where user_id = ?`
+	ret, err := db.Exec(sqlStr, dst, userId)
+	if err != nil {
+		zap.L().Error("update failed", zap.Error(err))
+		return ErrorUpdateFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorUpdateFailed
+	}
+	return err
 }

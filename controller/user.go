@@ -4,6 +4,7 @@ import (
 	"blog/dao/mysql"
 	"blog/logic"
 	"blog/models"
+	"blog/pkg/tools"
 	"errors"
 
 	"github.com/gin-gonic/gin"
@@ -86,4 +87,32 @@ func LoginHandler(c *gin.Context) {
 	data["token"] = token
 	// 返回响应
 	ResponseSuccess(c, data)
+}
+
+func UploadImage(c *gin.Context) {
+	userID, err := getCurrentUserID(c)
+	if err != nil {
+		ResponseError(c, CodeNeedLogin)
+		return
+	}
+	file, err := c.FormFile("file")
+	if err != nil {
+		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+	extName, ok := tools.SuffixName(file)
+	if !ok {
+		zap.L().Error("tools.SuffixName(file) failed", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeFileSuffixNotLegal)
+		return
+	}
+	dst, err := logic.UploadImage(file, extName, userID)
+	if err != nil {
+		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	c.SaveUploadedFile(file, dst)
+	ResponseSuccess(c, nil)
 }
