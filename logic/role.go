@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetRoleInfoByUserIdHandler(uid int64) (data *models.UserInfo, err error) {
+func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 	user, err := mysql.GetUserById(uid)
 	if err != nil {
 		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
@@ -16,7 +16,7 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.UserInfo, err error) {
 	if err != nil {
 		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
 	}
-	data = &models.UserInfo{
+	data = &models.RoleInfo{
 		Username:    user.Username,
 		Title:       role.Title,
 		Description: role.Description,
