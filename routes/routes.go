@@ -39,6 +39,7 @@ func Setup(mode string) *gin.Engine {
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.GET("/info", controller.GetUserInfoHandler)
+		v1.GET("/infoList", controller.GetUserInfoListHandler)
 		v1.PATCH("/upload", controller.UploadImage)
 	}
 	{
