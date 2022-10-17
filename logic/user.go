@@ -47,6 +47,10 @@ func GetUserInfo(uid int64) (data *models.UserInfo, err error) {
 	return mysql.GetUserInfoByUserId(uid)
 }
 
+func GetUserInfoList() (info []*models.UserInfo, err error) {
+	return mysql.GetUserInfoList()
+}
+
 func UploadImage(file *multipart.FileHeader, extName string, userID int64) (string, error) {
 	var host string
 	port := ":" + strconv.Itoa(setting.Conf.Port)

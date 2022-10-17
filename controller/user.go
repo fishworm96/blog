@@ -106,6 +106,17 @@ func GetUserInfoHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+func GetUserInfoListHandler(c *gin.Context) {
+	data, err := logic.GetUserInfoList()
+	if err != nil {
+		zap.L().Error("logic.GetUserInfoList() failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+
+	ResponseSuccess(c, data)
+}
+
 func UploadImage(c *gin.Context) {
 	userID, err := getCurrentUserID(c)
 	if err != nil {

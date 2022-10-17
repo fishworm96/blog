@@ -100,3 +100,12 @@ func GetUserInfoByUserId(uid int64) (info *models.UserInfo, err error) {
 	}
 	return
 }
+
+func GetUserInfoList() (info []*models.UserInfo, err error) {
+	sqlStr := `select username, email, nick_name, avatar, is_super, role_id, gender from user`
+	if err = db.Select(&info, sqlStr); err != nil {
+		zap.L().Error("there is no userInfo in db")
+		err = nil
+	}
+	return
+}
