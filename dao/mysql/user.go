@@ -73,6 +73,10 @@ func GetUserById(uid int64) (user *models.User, err error) {
 	user = new(models.User)
 	sqlStr := `select user_id, username from user where user_id = ?`
 	err = db.Get(user, sqlStr, uid)
+	if err == sql.ErrNoRows {
+		err = ErrorUserNotExist
+		return nil, err
+	}
 	return
 }
 
@@ -85,7 +89,7 @@ func EditAvatar(dst string, userId int64) error {
 	}
 	n, err := ret.RowsAffected()
 	if n == 0 {
-		return ErrorUpdateFailed
+		return ErrorUserNotExist
 	}
 	return err
 }
@@ -95,7 +99,8 @@ func GetUserInfoByUserId(uid int64) (info *models.UserInfo, err error) {
 	sqlStr := `select username, email, nick_name, avatar, is_super, role_id, gender from user where user_id = ?`
 	if err = db.Get(info, sqlStr, uid); err != nil {
 		if err == sql.ErrNoRows {
-			err = ErrorInvalidID
+			err = ErrorUserNotExist
+			return
 		}
 	}
 	return

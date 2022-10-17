@@ -6,6 +6,7 @@ import (
 	"blog/models"
 	"blog/pkg/tools"
 	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -90,16 +91,22 @@ func LoginHandler(c *gin.Context) {
 }
 
 func GetUserInfoHandler(c *gin.Context) {
-	userID, err := getCurrentUserID(c)
+	pidStr := c.Param("id")
+	id, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
-		ResponseError(c, CodeNeedLogin)
+		zap.L().Error("get role with param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
 		return
 	}
 
-	data, err := logic.GetUserInfo(userID)
+	data, err := logic.GetUserInfo(id)
 	if err != nil {
-		zap.L().Error("logic.GetUserInfo(userID) failed", zap.Int64("userID", userID), zap.Error(err))
-		ResponseError(c, CodeNeedLogin)
+		zap.L().Error("logic.GetUserInfo(userID) failed", zap.Int64("userID", id), zap.Error(err))
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			ResponseError(c, CodeUserNotExist)
+			return
+		}
+		ResponseError(c, CodeServerBusy)
 		return
 	}
 
@@ -118,11 +125,14 @@ func GetUserInfoListHandler(c *gin.Context) {
 }
 
 func UploadImage(c *gin.Context) {
-	userID, err := getCurrentUserID(c)
+	pidStr := c.Param("id")
+	id, err := strconv.ParseInt(pidStr, 10, 64)
 	if err != nil {
-		ResponseError(c, CodeNeedLogin)
+		zap.L().Error("get role with param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
 		return
 	}
+
 	file, err := c.FormFile("file")
 	if err != nil {
 		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
@@ -135,10 +145,14 @@ func UploadImage(c *gin.Context) {
 		ResponseError(c, CodeFileSuffixNotLegal)
 		return
 	}
-	dst, err := logic.UploadImage(file, extName, userID)
+	dst, err := logic.UploadImage(file, extName, id)
 	if err != nil {
 		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
-		ResponseError(c, CodeServerBusy)
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			ResponseError(c, CodeUserNotExist)
+			return
+		}
+		ResponseError(c, CodeUpdateFailed)
 		return
 	}
 	c.SaveUploadedFile(file, dst)
