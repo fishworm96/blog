@@ -89,6 +89,23 @@ func LoginHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+func GetUserInfoHandler(c *gin.Context) {
+	userID, err := getCurrentUserID(c)
+	if err != nil {
+		ResponseError(c, CodeNeedLogin)
+		return
+	}
+
+	data, err := logic.GetUserInfo(userID)
+	if err != nil {
+		zap.L().Error("logic.GetUserInfo(userID) failed", zap.Int64("userID", userID), zap.Error(err))
+		ResponseError(c, CodeNeedLogin)
+		return
+	}
+
+	ResponseSuccess(c, data)
+}
+
 func UploadImage(c *gin.Context) {
 	userID, err := getCurrentUserID(c)
 	if err != nil {

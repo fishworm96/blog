@@ -43,6 +43,10 @@ func Login(p *models.ParamLogin) (token string, err error) {
 	return jwt.GenToken(user.UserID, user.Username)
 }
 
+func GetUserInfo(uid int64) (data *models.UserInfo, err error) {
+	return mysql.GetUserInfoByUserId(uid)
+}
+
 func UploadImage(file *multipart.FileHeader, extName string, userID int64) (string, error) {
 	var host string
 	port := ":" + strconv.Itoa(setting.Conf.Port)
@@ -65,7 +69,7 @@ func UploadImage(file *multipart.FileHeader, extName string, userID int64) (stri
 		return "", err
 	}
 	fileName := strconv.FormatInt(tools.GetUnix(), 10) + extName
-	
+
 	dst := path.Join(dir, fileName)
 	dir2 := host + port + "/" + dst
 

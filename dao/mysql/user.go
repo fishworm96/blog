@@ -89,3 +89,14 @@ func EditAvatar(dst string, userId int64) error {
 	}
 	return err
 }
+
+func GetUserInfoByUserId(uid int64) (info *models.UserInfo, err error) {
+	info = new(models.UserInfo)
+	sqlStr := `select username, email, nick_name, avatar, is_super, role_id, gender from user where user_id = ?`
+	if err = db.Get(info, sqlStr, uid); err != nil {
+		if err == sql.ErrNoRows {
+			err = ErrorInvalidID
+		}
+	}
+	return
+}
