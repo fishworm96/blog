@@ -29,9 +29,9 @@ func GetMenuHandler(c *gin.Context) {
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-	data, err := logic.GetMenu(id)
+	data, err := logic.GetMenuByUserId(id)
 	if err != nil {
-		zap.L().Error("logic.GetMenu() failed", zap.Error(err))
+		zap.L().Error("logic.GetMenuByUserId(id) failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}

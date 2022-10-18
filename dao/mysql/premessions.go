@@ -34,6 +34,16 @@ func GetMenu(id int64) (menu *models.MenuDetail, err error) {
 	return
 }
 
+func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
+	sqlStr := `select id, title, icon, path, module_id from access where id in (
+		select access_id from role_access where role_id = (
+		select role_id from user where user_id = ?
+		)
+	)`
+	err = db.Select(&menu, sqlStr, id)
+	return
+}
+
 // 添加菜单
 func AddMenu(m *models.ParamMenu) (err error) {
 	sqlStr := `insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)`

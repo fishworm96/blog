@@ -90,6 +90,7 @@ func LoginHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+// GetUserInfoHandler 获取用户信息
 func GetUserInfoHandler(c *gin.Context) {
 	pidStr := c.Param("id")
 	id, err := strconv.ParseInt(pidStr, 10, 64)
@@ -124,6 +125,7 @@ func GetUserInfoListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+// UploadImage 上传头像
 func UploadImage(c *gin.Context) {
 	pidStr := c.Param("id")
 	id, err := strconv.ParseInt(pidStr, 10, 64)
