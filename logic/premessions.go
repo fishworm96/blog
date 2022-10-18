@@ -32,18 +32,20 @@ func GetMenuList() (data []*models.MenuDetail, err error) {
 	return
 }
 
+func getTreeRecursive(list []*models.MenuDetail, parentId int64) []*models.MenuDetail {
+	res := make([]*models.MenuDetail, 0, len(list))
+	for _, v := range list {
+			if v.ModuleId == parentId {
+					v.Children = getTreeRecursive(list, v.Id)
+					res = append(res, v)
+			}
+	}
+	return res
+}
+
 func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
 	menus, err := mysql.GetMenuByUserId(id)
-	data = make([]*models.MenuDetail, 0, len(menus))
-	for _, menu := range menus {
-		for _, m := range menus {
-			if menu.Id == m.ModuleId {
-				menu.Children = append(menu.Children, m)
-				continue
-			}
-		}
-		data = append(data, menu)
-	}
+	data = getTreeRecursive(menus, 0)
 	return
 }
 
