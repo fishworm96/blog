@@ -32,8 +32,19 @@ func GetMenuList() (data []*models.MenuDetail, err error) {
 	return
 }
 
-func GetMenu(id int64) (data *models.MenuDetail, err error) {
-	return mysql.GetMenu(id)
+func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
+	menus, err := mysql.GetMenuByUserId(id)
+	data = make([]*models.MenuDetail, 0, len(menus))
+	for _, menu := range menus {
+		for _, m := range menus {
+			if menu.Id == m.ModuleId {
+				menu.Children = append(menu.Children, m)
+				continue
+			}
+		}
+		data = append(data, menu)
+	}
+	return
 }
 
 func AddMenu(m *models.ParamMenu) error {

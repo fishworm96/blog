@@ -3,6 +3,7 @@ package mysql
 import "errors"
 
 var (
+	ErrorGetFailed = errors.New("获取失败")
 	ErrorUserExist = errors.New("用户已存在")
 	ErrorUserNotExist = errors.New("用户不存在")
 	ErrorInvalidPassword = errors.New("用户或密码错误")
