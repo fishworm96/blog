@@ -35,8 +35,13 @@ func GetMenuList() (data []*models.MenuDetail, err error) {
 func getTreeRecursive(list []*models.MenuDetail, parentId int64) []*models.MenuDetail {
 	res := make([]*models.MenuDetail, 0)
 	for _, v := range list {
+<<<<<<< HEAD
 			if v.ModuleID == parentId {
 					v.Children = getTreeRecursive(list, v.ID)
+=======
+			if v.ModuleId == parentId {
+					v.Children = getTreeRecursive(list, v.Id)
+>>>>>>> 2ff952715fe4979191ea6447df85d3871d36f1d5
 					res = append(res, v)
 			}
 	}
