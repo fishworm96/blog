@@ -27,7 +27,7 @@ func AddPostTag(postTag *models.ParamPostAndTag) (err error) {
 		and tag.tag_name = ?
 		)
 		`
-	ret, err := db.Exec(sqlStr, postTag.Id, postTag.Name, postTag.Id, postTag.Name)
+	ret, err := db.Exec(sqlStr, postTag.ID, postTag.Name, postTag.ID, postTag.Name)
 	if err != nil {
 		zap.L().Error("add post tag failed", zap.Error(err))
 		return ErrorAddFailed

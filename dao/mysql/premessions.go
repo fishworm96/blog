@@ -47,7 +47,7 @@ func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
 // 添加菜单
 func AddMenu(m *models.ParamMenu) (err error) {
 	sqlStr := `insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)`
-	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleId)
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleID)
 	if err != nil {
 		zap.L().Error("add menu failed", zap.Error(err))
 		return ErrorAddFailed
@@ -61,7 +61,7 @@ func AddMenu(m *models.ParamMenu) (err error) {
 
 func UpdateMenuById(m *models.ParamUpdateMenu) (err error) {
 	sqlStr := `update access set title = ?, icon = ?, path = ?, type = ?, module_id = ? where id = ?`
-	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleId, m.Id)
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleID, m.ID)
 	if err != nil {
 		zap.L().Error("update menu failed", zap.Error(err))
 		return ErrorUpdateFailed
