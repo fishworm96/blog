@@ -56,7 +56,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		postList = append(postList, postDetail)
 	}
 	data = &models.ApiTagDetail{
-		Id: tag.Id,
+		Id: tag.ID,
 		Name: tag.Name,
 		Post: postList,
 	}

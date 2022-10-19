@@ -44,6 +44,7 @@ func Setup(mode string) *gin.Engine {
 	}
 	{
 		v1.GET("/role/:id", controller.GetRoleInfoHandler)
+		v1.PUT("role", controller.UpdateRoleHandler)
 	}
 	{
 		v1.GET("/menu", controller.GetMenuListHandler)
