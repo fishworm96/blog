@@ -27,13 +27,17 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 }
 
 func UpdateRoleMenu(role *models.RoleMenu) (err error) {
-	if err = mysql.DeleteRoleAccessByUserID(role.RoleID); err != nil {
-		zap.L().Error("mysql.DeleteRoleAccessByUserID(role.RoleID)", zap.Error(err))
-		return
-	}
-	for _, r := range role.AccessID {
-		err = mysql.AddRoleAccess(role.RoleID, r)
-		continue
-	}
+	go func() {
+		err = mysql.DeleteRoleAccessByUserID(role.RoleID)
+		if err != nil {
+			return
+		}
+	}()
+	go func() {
+		for _, r := range role.AccessID {
+			err = mysql.AddRoleAccess(role.RoleID, r)
+			continue
+		}
+	}()
 	return
 }
