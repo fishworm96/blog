@@ -7,6 +7,8 @@ const (
 	KeyPostVotedZSetPF = "post:voted:"
 
 	KeyCommunitySetPF = "community:"
+
+	KeyEmailSetPF = "email:"
 )
 
 func getRedisKey(key string) string {

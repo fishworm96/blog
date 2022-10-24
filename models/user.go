@@ -16,3 +16,7 @@ type UserInfo struct {
 	RoleId int64 `json:"role_id" db:"role_id"`
 	Gender int64 `json:"gender" db:"gender"`
 }
+
+type Email struct {
+	Email string `json:"email" binding:"required"`
+}

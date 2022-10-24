@@ -26,6 +26,8 @@ func Setup(mode string) *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
+	v1.POST("/email", controller.GetEmailCode)
+	v1.POST("/emailLogin", controller.EmailLoginHandler)
 	v1.POST("/signUp", controller.SignUpHandler)
 	v1.POST("/login", controller.LoginHandler)
 	v1.GET("/community", controller.CommunityHandler)

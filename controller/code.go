@@ -18,6 +18,7 @@ const (
 	CodeNeedLogin
 	CodeInvalidToken
 	CodeFileSuffixNotLegal
+	CodeIncorrect
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -36,6 +37,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeNeedLogin: "需要登录",
 	CodeInvalidToken: "无效的token",
 	CodeFileSuffixNotLegal: "文件后缀名不合法",
+	CodeIncorrect: "验证码不正确",
 }
 
 func (c ResCode) Msg() string {
