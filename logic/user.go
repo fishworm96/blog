@@ -2,8 +2,10 @@ package logic
 
 import (
 	"blog/dao/mysql"
+	"blog/dao/redis"
 	"blog/models"
 	"blog/pkg/jwt"
+	"blog/pkg/send_email"
 	"blog/pkg/snowflake"
 	"blog/pkg/tools"
 	"blog/setting"
@@ -12,6 +14,8 @@ import (
 	"os"
 	"path"
 	"strconv"
+
+	"go.uber.org/zap"
 )
 
 func SignUp(p *models.ParamSignUp) (err error) {
@@ -40,6 +44,15 @@ func Login(p *models.ParamLogin) (token string, err error) {
 		return "", err
 	}
 	// 返回token
+	return jwt.GenToken(user.UserID, user.Username)
+}
+
+func EmailLogin(p *models.EmailLogin) (token string, err error) {
+	user := new(models.User)
+	if err := redis.GetCode(p); err != nil {
+		return "", err
+	}
+	mysql.EmailLogin(user, p.Email)
 	return jwt.GenToken(user.UserID, user.Username)
 }
 
@@ -78,4 +91,13 @@ func UploadImage(file *multipart.FileHeader, extName string, userID int64) (stri
 	dir2 := host + port + "/" + dst
 
 	return dst, mysql.EditAvatar(dir2, userID)
+}
+
+func SendCode(email string) (err error) {
+	code := send_email.GetRand()
+	if err = send_email.SendCode(email, code); err != nil {
+		zap.L().Error("err", zap.Error(err))
+		return
+	}
+	return redis.SaveCode(email, code)
 }

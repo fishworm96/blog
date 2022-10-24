@@ -18,6 +18,11 @@ type ParamLogin struct {
 	Password string `json:"password" binding:"required"` // 密码
 }
 
+type EmailLogin struct {
+	Email string `json:"email" binding:"required"` // 邮箱
+	Code string `json:"code" binding:"required"` // 验证码
+}
+
 // ParamPost
 type ParamPost struct {
 	Title string `json:"title" binding:"required"` // 文章标题

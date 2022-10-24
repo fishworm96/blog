@@ -90,6 +90,32 @@ func LoginHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+func EmailLoginHandler(c *gin.Context) {
+	p := new(models.EmailLogin)
+	if err := c.ShouldBindJSON(p); err != nil {
+		zap.L().Error("EmailLogin with invalid param", zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	token, err := logic.EmailLogin(p)
+	if err != nil {
+		zap.L().Error("logic.EmailLogin failed", zap.String("email", p.Email), zap.Error(err))
+		ResponseError(c, CodeIncorrect)
+		return
+	}
+	data := make(map[string]string)
+	data["token"] = token
+
+	// 返回响应
+	ResponseSuccess(c, data)
+}
+
 // GetUserInfoHandler 获取用户信息
 func GetUserInfoHandler(c *gin.Context) {
 	pidStr := c.Param("id")
@@ -158,5 +184,26 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 	c.SaveUploadedFile(file, dst)
+	ResponseSuccess(c, nil)
+}
+
+func GetEmailCode(c *gin.Context) {
+	e := new(models.Email)
+	if err := c.ShouldBindJSON(e); err != nil {
+		zap.L().Error("get Code with invalid param", zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	if err := logic.SendCode(e.Email); err != nil {
+		zap.L().Error("err", zap.Error(err))
+		return
+	}
+
 	ResponseSuccess(c, nil)
 }
