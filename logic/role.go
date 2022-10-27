@@ -27,17 +27,12 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 }
 
 func UpdateRoleMenu(role *models.RoleMenu) (err error) {
-	go func() {
-		err = mysql.DeleteRoleAccessByUserID(role.RoleID)
-		if err != nil {
+		if err = mysql.DeleteRoleAccessByUserID(role.RoleID); err != nil {
 			return
 		}
-	}()
-	go func() {
 		for _, r := range role.AccessID {
 			err = mysql.AddRoleAccess(role.RoleID, r)
 			continue
 		}
-	}()
 	return
 }
