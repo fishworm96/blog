@@ -16,7 +16,12 @@ type AppConfig struct {
 	Port int `mapstructure:"port"`
     // 添加时间
 	StartTime string `mapstructure:"start_time"`
-	MachineID int64 `mapstaructure:"machine_id"`
+	MachineID int64 `mapstructure:"machine_id"`
+	EmailSecretCode string `mapstructure:"email_secret_code"`
+	AccessKey string `mapstructure:"access_key"`
+	SecretKey string `mapstructure:"secret_key"`
+	Bucket string `mapstructure:"bucket"`
+	ImgUrl string `mapstructure:"img_url"`
 	*LogConfig `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
