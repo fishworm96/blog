@@ -4,6 +4,11 @@ port: 8080
 version: "v0.1.4"
 start_time: "2022-07-01"
 machine_id: 1
+email_secret_code: ""
+access_key: ""
+secret_key: ""
+bucket: "blogoss0"
+img_url: "image.fishworm.top/"
 
 auth:
   jwt_expire: 8760
