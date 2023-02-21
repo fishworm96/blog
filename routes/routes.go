@@ -22,7 +22,7 @@ func Setup(mode string) *gin.Engine {
 	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.Cors())
 
 	r.Static("/static", "./static")
-	
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 
@@ -49,8 +49,8 @@ func Setup(mode string) *gin.Engine {
 		v1.PUT("role", controller.UpdateRoleHandler)
 	}
 	{
-		v1.GET("/menu", controller.GetMenuListHandler)
-		v1.GET("/menu/:id", controller.GetMenuHandler)
+		v1.GET("/menu", controller.GetMenuHandler)
+		v1.GET("/menu/:id", controller.GetMenuListByUserIdHandler)
 		v1.POST("/menu", controller.AddMenuHandler)
 		v1.PUT("/menu", controller.UpdateMenuHandler)
 		v1.DELETE("/menu/:id", controller.DeleteMenuHandler)

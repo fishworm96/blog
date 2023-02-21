@@ -11,7 +11,24 @@ import (
 )
 
 // 获取菜单列表
-func GetMenuListHandler(c *gin.Context) {
+func GetMenuHandler(c *gin.Context) {
+	idStr, ok := c.GetQuery("id")
+	if ok {
+		id, err := strconv.ParseInt(idStr, 10, 64)
+		if err != nil {
+			zap.L().Error("get menu detail with invalid param", zap.Int64("id", id), zap.Error(err))
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		data, err := logic.GetMenuByMenuId(id)
+		if err != nil {
+			zap.L().Error("logic.getMenuByMenuId failed", zap.Error(err))
+			ResponseError(c, CodeServerBusy)
+			return
+		}
+		ResponseSuccess(c, data)
+		return
+	}
 	data, err := logic.GetMenuList()
 	if err != nil {
 		zap.L().Error("logic.GetMenuListHandler() failed", zap.Error(err))
@@ -21,7 +38,7 @@ func GetMenuListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-func GetMenuHandler(c *gin.Context) {
+func GetMenuListByUserIdHandler(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -38,6 +55,25 @@ func GetMenuHandler(c *gin.Context) {
 
 	ResponseSuccess(c, data)
 }
+
+// func GetMenuByMenuIdHandler(c *gin.Context) {
+// 	idStr := c.Query("id")
+// 	zap.L().Error("id", zap.Any("id", idStr))
+// 	id, err := strconv.ParseInt(idStr, 10, 64)
+// 	if err != nil {
+// 		zap.L().Error("get menu detail with invalid param", zap.Int64("id", id), zap.Error(err))
+// 		ResponseError(c, CodeInvalidParam)
+// 		return
+// 	}
+// 	data, err := logic.GetMenuByMenuId(id)
+// 	if err != nil {
+// 		zap.L().Error("logic.getMenuByMenuId failed", zap.Error(err))
+// 		ResponseError(c, CodeServerBusy)
+// 		return
+// 	}
+
+// 	ResponseSuccess(c, nil)
+// }
 
 // 添加菜单
 func AddMenuHandler(c *gin.Context) {
