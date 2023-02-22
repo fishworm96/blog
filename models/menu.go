@@ -3,6 +3,7 @@ package models
 type MenuDetail struct {
 	ID       int64         `json:"id" db:"id"`
 	ModuleID int64         `json:"module_id" db:"module_id"`
+	Type     int64         `json:"type" db:"type"`
 	Title    string        `json:"title" db:"title"`
 	Icon     string        `json:"icon" db:"icon"`
 	Path     string        `json:"path" db:"path"`
@@ -11,6 +12,7 @@ type MenuDetail struct {
 
 type MenuDetailInfo struct {
 	ID         int64  `json:"id" db:"id"`
+	Type       int64  `json:"type" db:"type"`
 	ModuleID   int64  `json:"module_id" db:"module_id"`
 	ParentID   int64  `json:"parent_id" db:"parent_id"`
 	Title      string `json:"title" db:"title"`
