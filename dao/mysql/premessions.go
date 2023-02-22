@@ -7,7 +7,7 @@ import (
 )
 
 // 获取一级菜单
-func GetMenuList() (menus []*models.MenuDetails, err error) {
+func GetMenuList() (menus []*models.MenuDetail, err error) {
 	sqlStr := `select id, title, icon, path, module_id from access where type = 1`
 	if err = db.Select(&menus, sqlStr); err != nil {
 		zap.L().Error("there is no menus in db")
@@ -17,7 +17,7 @@ func GetMenuList() (menus []*models.MenuDetails, err error) {
 }
 
 // 获取多级菜单列表
-func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetails, err error) {
+func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetail, err error) {
 	sqlStr := `select id, title, icon, path, module_id from access where module_id = ?`
 	if err = db.Select(&children, sqlStr, id); err != nil {
 		zap.L().Error("there is no children in db")
@@ -35,14 +35,14 @@ func GetMenuByMenuId(id int64) (menu *models.MenuDetail, err error) {
 	return
 }
 
-func GetMenu(id int64) (menu *models.MenuDetails, err error) {
-	menu = new(models.MenuDetails)
+func GetMenu(id int64) (menu *models.MenuDetail, err error) {
+	menu = new(models.MenuDetail)
 	sqlStr := `select id, title, icon, path, module_id from access where id = ?`
 	err = db.Get(menu, sqlStr, id)
 	return
 }
 
-func GetMenuByUserId(id int64) (menu []*models.MenuDetails, err error) {
+func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
 	sqlStr := `select id, title, icon, path, module_id from access where id in (
 		select access_id from role_access where role_id = (
 		select role_id from user where user_id = ?
