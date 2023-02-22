@@ -58,7 +58,7 @@ func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
 // 添加菜单
 func AddMenu(m *models.ParamMenu) (err error) {
 	sqlStr := `insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)`
-	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleID)
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ParentID)
 	if err != nil {
 		zap.L().Error("add menu failed", zap.Error(err))
 		return ErrorAddFailed
