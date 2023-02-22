@@ -23,7 +23,7 @@ func GetMenuHandler(c *gin.Context) {
 		data, err := logic.GetMenuByMenuId(id)
 		if err != nil {
 			zap.L().Error("logic.getMenuByMenuId failed", zap.Error(err))
-			ResponseError(c, CodeServerBusy)
+			ResponseError(c, CodeMenuNotExist)
 			return
 		}
 		ResponseSuccess(c, data)
@@ -32,7 +32,7 @@ func GetMenuHandler(c *gin.Context) {
 	data, err := logic.GetMenuList()
 	if err != nil {
 		zap.L().Error("logic.GetMenuListHandler() failed", zap.Error(err))
-		ResponseError(c, CodeServerBusy)
+		ResponseError(c, CodeMenuNotExist)
 		return
 	}
 	ResponseSuccess(c, data)

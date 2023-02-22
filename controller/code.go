@@ -12,6 +12,7 @@ const (
 	CodeAddFailed
 	CodeUpdateFailed
 	CodeDeleteFailed
+	CodeMenuNotExist
 	CodePostNotExist
 	CodeTagExist
 	CodeTagNotExist
@@ -31,6 +32,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeAddFailed: "添加失败",
 	CodeUpdateFailed: "修改失败",
 	CodeDeleteFailed: "删除失败",
+	CodeMenuNotExist: "菜单不存在",
 	CodePostNotExist: "帖子不存在",
 	CodeTagExist: "标签已存在",
 	CodeTagNotExist: "标签不存在",

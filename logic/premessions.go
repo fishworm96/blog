@@ -49,7 +49,7 @@ func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
 	return
 }
 
-func GetMenuByMenuId(id int64) (data *models.MenuDetail, err error) {
+func GetMenuByMenuId(id int64) (data *models.MenuDetailInfo, err error) {
 	data, err = mysql.GetMenuByMenuId(id)
 	return
 }

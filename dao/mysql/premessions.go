@@ -28,9 +28,12 @@ func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetail, err e
 }
 
 // 根据菜单id获取单条菜单信息
-func GetMenuByMenuId(id int64) (menu *models.MenuDetail, err error) {
-	menu = new(models.MenuDetail)
-	sqlStr := `select id, title, icon, path, module_id from access where id = ?`
+func GetMenuByMenuId(id int64) (menu *models.MenuDetailInfo, err error) {
+	menu = new(models.MenuDetailInfo)
+	sqlStr := `select a.id, a.title, a.icon, a.path, a.module_id, b.title as parent_name, b.module_id as parent_id 
+	from access a 
+	left join access b on a.module_id = b.id 
+	where a.id = ?`
 	err = db.Get(menu, sqlStr, id)
 	return
 }
