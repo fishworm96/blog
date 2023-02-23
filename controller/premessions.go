@@ -104,7 +104,7 @@ func AddMenuHandler(c *gin.Context) {
 func UpdateMenuHandler(c *gin.Context) {
 	m := new(models.ParamUpdateMenu)
 	if err := c.ShouldBindJSON(m); err != nil {
-		zap.L().Debug("c.ShouldBindJSON(m) failed", zap.Any("err", err))
+		zap.L().Debug("c.ShouldBindJSON(m) failed", zap.Any("err", err), zap.Any("params", m))
 		zap.L().Error("update menu with invalid param")
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
