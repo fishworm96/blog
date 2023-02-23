@@ -64,9 +64,6 @@ func UpdateMenu(m *models.ParamUpdateMenu) error {
 
 func DeleteMenu(id int64) (state bool, err error) {
 	m, err := mysql.GetMenu(id)
-	if m.ModuleID == 0 {
-		return false, err
-	}
 	if err != nil {
 		zap.L().Error("mysql.GetMenu(id) failed", zap.Int64("id", id), zap.Error(err))
 		return
