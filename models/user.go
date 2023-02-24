@@ -7,6 +7,11 @@ type User struct {
 	Password string `db:"password"`
 }
 
+type ArticleAuthor struct {
+	UserID int64 `json:"user_id" db:"user_id"`
+	NickName string `json:"nick_name" db:"nick_name"`
+}
+
 type UserInfo struct {
 	Username string `json:"username" db:"username"`
 	Email string `json:"email" db:"email"`

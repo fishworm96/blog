@@ -19,7 +19,7 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 		return
 	}
 	data = &models.RoleInfo{
-		Username:    user.Username,
+		Username:    user.NickName,
 		Title:       role.Title,
 		Description: role.Description,
 	}

@@ -48,7 +48,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 			return nil, err
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName:      user.Username,
+			AuthorName:      user.NickName,
 			Post:            post,
 			CommunityDetail: community,
 			Tag:             tags,

@@ -47,7 +47,7 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 	}
 	// 接口数据拼接
 	data = &models.ApiPostDetail{
-		AuthorName:      user.Username,
+		AuthorName:      user.NickName,
 		Post:            post,
 		CommunityDetail: community,
 	}
@@ -79,7 +79,7 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 			return nil, err
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName:      user.Username,
+			AuthorName:      user.NickName,
 			Post:            post,
 			CommunityDetail: community,
 			Tag: tags,
@@ -133,7 +133,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 			continue
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName: user.Username,
+			AuthorName: user.NickName,
 			VoteNum: voteData[idx],
 			Post: post,
 			CommunityDetail: community,
@@ -180,7 +180,7 @@ func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostDetail
 			continue
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName:      user.Username,
+			AuthorName:      user.NickName,
 			VoteNum:         voteData[idx],
 			Post:            post,
 			CommunityDetail: community,

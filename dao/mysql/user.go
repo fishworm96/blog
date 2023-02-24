@@ -78,9 +78,9 @@ func EmailLogin(user *models.User, email string) (err error) {
 }
 
 // GetUserById 根据用户id获取用户信息
-func GetUserById(uid int64) (user *models.User, err error) {
-	user = new(models.User)
-	sqlStr := `select user_id, username from user where user_id = ?`
+func GetUserById(uid int64) (user *models.ArticleAuthor, err error) {
+	user = new(models.ArticleAuthor)
+	sqlStr := `select user_id, nick_name from user where user_id = ?`
 	err = db.Get(user, sqlStr, uid)
 	if err == sql.ErrNoRows {
 		err = ErrorUserNotExist
