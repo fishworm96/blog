@@ -53,13 +53,13 @@ type ParamMenu struct {
 	Icon     string `json:"icon" db:"icon"`
 	Path     string `json:"path" db:"path" binding:"required"`
 	Type     *int64  `json:"type" db:"type" binding:"required"`
-	ParentID *int64  `json:"parent_id" db:"parent_id" binding:"required"`
+	ModuleID *int64  `json:"module_id" db:"module_id" binding:"required"`
 }
 
 type ParamUpdateMenu struct {
 	ID       int64  `json:"id" db:"id" binding:"required"`
 	Type     *int64  `json:"type" db:"type" binding:"required"`
-	ParentID *int64  `json:"parent_id" db:"parent_id" binding:"required"`
+	ModuleID *int64  `json:"module_id" db:"module_id" binding:"required"`
 	Title    string `json:"title" db:"title" binding:"required"`
 	Icon     string `json:"icon" db:"icon"`
 	Path     string `json:"path" db:"path" binding:"required"`

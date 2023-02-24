@@ -30,7 +30,7 @@ func GetChildrenMenuListByMenuId(id int64) (children []*models.MenuDetail, err e
 // 根据菜单id获取单条菜单信息
 func GetMenuByMenuId(id int64) (menu *models.MenuDetailInfo, err error) {
 	menu = new(models.MenuDetailInfo)
-	sqlStr := `select a.id, a.title, a.icon, a.path, a.type, a.module_id, b.title as parent_name, b.module_id as parent_id 
+	sqlStr := `select a.id, a.title, a.icon, a.path, a.type, a.module_id, b.title as parent_name
 	from access a 
 	left join access b on a.module_id = b.id 
 	where a.id = ?`
@@ -58,7 +58,7 @@ func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
 // 添加菜单
 func AddMenu(m *models.ParamMenu) (err error) {
 	sqlStr := `insert into access(title, icon, path, type, module_id) values(?, ?, ?, ?, ?)`
-	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ParentID)
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleID)
 	if err != nil {
 		zap.L().Error("add menu failed", zap.Error(err))
 		return ErrorAddFailed
@@ -72,7 +72,7 @@ func AddMenu(m *models.ParamMenu) (err error) {
 
 func UpdateMenuById(m *models.ParamUpdateMenu) (err error) {
 	sqlStr := `update access set title = ?, icon = ?, path = ?, type = ?, module_id = ? where id = ?`
-	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ParentID, m.ID)
+	ret, err := db.Exec(sqlStr, m.Title, m.Icon, m.Path, m.Type, m.ModuleID, m.ID)
 	if err != nil {
 		zap.L().Error("update menu failed", zap.Error(err))
 		return ErrorUpdateFailed
