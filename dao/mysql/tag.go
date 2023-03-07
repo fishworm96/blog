@@ -23,7 +23,13 @@ func CheckTagExist(tagName string) (err error) {
 func CreateTag(name string) (err error) {
 	sqlStr := `insert into tag(tag_name) values (?)`
 	_, err = db.Exec(sqlStr, name)
-	return err
+	return
+}
+
+func CreateTag1(postID, tagID int64) (err error) {
+	sqlStr := `insert into post_tag(post_id, tag_id) values (?, ?)`
+	_, err = db.Exec(sqlStr, postID, tagID)
+	return
 }
 
 // GetTagList 向数据库查询标签列表

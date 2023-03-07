@@ -13,6 +13,13 @@ func CreatePost(p *models.Post) (err error) {
 	// 生成post id
 	p.ID = snowflake.GenID()
 	// 保存到数据库
+	zap.L().Debug("pid", zap.Int64("pid", p.ID))
+	for _, tagId := range p.Tag {
+		err = mysql.CreateTag1(p.ID, tagId)
+		if err != nil {
+			return err
+		}
+	}
 	err = mysql.CreatePost(p)
 	if err != nil {
 		return err
