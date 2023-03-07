@@ -11,7 +11,7 @@
  Target Server Version : 100417
  File Encoding         : 65001
 
- Date: 06/03/2023 17:28:05
+ Date: 07/03/2023 17:28:44
 */
 
 SET NAMES utf8mb4;
@@ -67,7 +67,7 @@ CREATE TABLE `post`  (
   UNIQUE INDEX `idx_post_id`(`post_id`) USING BTREE,
   INDEX `idx_author_id`(`author_id`) USING BTREE,
   INDEX `idx_community_id`(`community_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for post_tag
@@ -75,7 +75,8 @@ CREATE TABLE `post`  (
 DROP TABLE IF EXISTS `post_tag`;
 CREATE TABLE `post_tag`  (
   `post_id` bigint(20) NULL DEFAULT NULL COMMENT '文章id',
-  `tag_name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签id'
+  `tag_name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签id',
+  `tag_id` int(10) NULL DEFAULT NULL COMMENT '标签id'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -126,7 +127,7 @@ CREATE TABLE `tag`  (
   `created_time` timestamp(0) NULL DEFAULT current_timestamp(0) COMMENT '创建时间',
   `updated_time` timestamp(0) NULL DEFAULT current_timestamp(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章标签管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章标签管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user
