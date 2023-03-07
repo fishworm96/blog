@@ -6,6 +6,10 @@ const (
 	OrderScore = "score"
 )
 
+type ParamsID struct {
+	ID int64 `json:"id" db:"id"`
+}
+
 type ParamSignUp struct {
 	Username   string `json:"username" binding:"required,max=24,min=6"`        // 用户名
 	Password   string `json:"password" binding:"required,max=24,min=6"`        // 密码
@@ -25,6 +29,7 @@ type EmailLogin struct {
 
 // ParamPost
 type ParamPost struct {
+	PostID int64 `json:"post_id" db:"post_id"`
 	Title   string `json:"title" binding:"required"`   // 文章标题
 	Content string `json:"content" binding:"required"` // 文章内容
 }
@@ -52,14 +57,14 @@ type ParamMenu struct {
 	Title    string `json:"title" db:"title" binding:"required"`
 	Icon     string `json:"icon" db:"icon"`
 	Path     string `json:"path" db:"path" binding:"required"`
-	Type     *int64  `json:"type" db:"type" binding:"required"`
-	ModuleID *int64  `json:"module_id" db:"module_id" binding:"required"`
+	Type     *int64 `json:"type" db:"type" binding:"required"`
+	ModuleID *int64 `json:"module_id" db:"module_id" binding:"required"`
 }
 
 type ParamUpdateMenu struct {
 	ID       int64  `json:"id" db:"id" binding:"required"`
-	Type     *int64  `json:"type" db:"type" binding:"required"`
-	ModuleID *int64  `json:"module_id" db:"module_id" binding:"required"`
+	Type     *int64 `json:"type" db:"type" binding:"required"`
+	ModuleID *int64 `json:"module_id" db:"module_id" binding:"required"`
 	Title    string `json:"title" db:"title" binding:"required"`
 	Icon     string `json:"icon" db:"icon"`
 	Path     string `json:"path" db:"path" binding:"required"`

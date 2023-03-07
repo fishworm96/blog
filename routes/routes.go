@@ -42,7 +42,7 @@ func Setup(mode string) *gin.Engine {
 	{
 		v1.GET("/info/:id", controller.GetUserInfoHandler)
 		v1.GET("/infoList", controller.GetUserInfoListHandler)
-		v1.PATCH("/upload/:id", controller.UploadImage)
+		v1.PATCH("/upload", controller.UploadImage)
 	}
 	{
 		v1.GET("/role/:id", controller.GetRoleInfoHandler)
@@ -53,19 +53,19 @@ func Setup(mode string) *gin.Engine {
 		v1.GET("/menu/:id", controller.GetMenuListByUserIdHandler)
 		v1.POST("/menu", controller.AddMenuHandler)
 		v1.PUT("/menu", controller.UpdateMenuHandler)
-		v1.DELETE("/menu/:id", controller.DeleteMenuHandler)
+		v1.DELETE("/menu", controller.DeleteMenuHandler)
 	}
 	{
 		v1.POST("/post", controller.CreatePostHandler)
 		v1.POST("/post/addPostTag", controller.AddPostTagHandler)
-		v1.PUT("/post/edit/:id", controller.UpdatePostHandler)
-		v1.DELETE("/post/:id", controller.DeletePostHandler)
+		v1.PUT("/post/edit", controller.UpdatePostHandler)
+		v1.DELETE("/post", controller.DeletePostHandler)
 		v1.POST("/vote", controller.PostVoteController)
 	}
 	{
 		v1.POST("/tag", controller.CreateTagHandler)
 		v1.PUT("/tag/edit", controller.UpdateTagHandler)
-		v1.DELETE("/tag/:ids", controller.DeleteTagHandler)
+		v1.DELETE("/tag", controller.DeleteTagHandler)
 	}
 	return r
 }

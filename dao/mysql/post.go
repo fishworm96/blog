@@ -59,9 +59,9 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 }
 
 // UpdatePost 更新文章信息
-func UpdatePost(pid int64, p *models.ParamPost) (err error) {
+func UpdatePost(p *models.ParamPost) (err error) {
 	sqlStr := `update post set title = ?, content = ? where post_id = ?`
-	ret, err := db.Exec(sqlStr, p.Title, p.Content, pid)
+	ret, err := db.Exec(sqlStr, p.Title, p.Content, p.PostID)
 	if err != nil {
 		zap.L().Error("Update failed", zap.Error(err))
 		return ErrorUpdateFailed

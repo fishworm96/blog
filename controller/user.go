@@ -153,10 +153,9 @@ func GetUserInfoListHandler(c *gin.Context) {
 
 // UploadImage 上传头像
 func UploadImage(c *gin.Context) {
-	pidStr := c.Param("id")
-	id, err := strconv.ParseInt(pidStr, 10, 64)
-	if err != nil {
-		zap.L().Error("get role with param", zap.Int64("id", id), zap.Error(err))
+	params := new(models.ParamsID)
+	if err := c.ShouldBindJSON(&params); err != nil {
+		zap.L().Error("get role with param", zap.Any("params", params), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
@@ -173,6 +172,7 @@ func UploadImage(c *gin.Context) {
 		ResponseError(c, CodeFileSuffixNotLegal)
 		return
 	}
+	id := params.ID
 	dst, err := logic.UploadImage(file, extName, id)
 	if err != nil {
 		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))

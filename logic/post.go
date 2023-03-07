@@ -89,8 +89,8 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 	return
 }
 
-func UpdatePost(pid int64, p *models.ParamPost) error {
-	return mysql.UpdatePost(pid, p)
+func UpdatePost(p *models.ParamPost) error {
+	return mysql.UpdatePost(p)
 }
 
 func DeletePostById(pid int64) error {
