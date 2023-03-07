@@ -13,9 +13,8 @@ func CreatePost(p *models.Post) (err error) {
 	// 生成post id
 	p.ID = snowflake.GenID()
 	// 保存到数据库
-	zap.L().Debug("pid", zap.Int64("pid", p.ID))
 	for _, tagId := range p.Tag {
-		err = mysql.CreateTag1(p.ID, tagId)
+		err = mysql.CreateTagByPostId(p.ID, tagId)
 		if err != nil {
 			return err
 		}
@@ -89,15 +88,23 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostDetail, err erro
 			AuthorName:      user.NickName,
 			Post:            post,
 			CommunityDetail: community,
-			Tag: tags,
+			Tag:             tags,
 		}
 		data = append(data, postDetail)
 	}
 	return
 }
 
-func UpdatePost(p *models.ParamPost) error {
-	return mysql.UpdatePost(p)
+func UpdatePost(p *models.ParamPost) (err error) {
+	err = mysql.UpdatePost(p)
+	err = mysql.DeleteTagByPostID(p.PostID)
+	for _, tag := range p.Tag {
+		err = mysql.CreateTagByPostId(p.PostID, tag)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
 
 func DeletePostById(pid int64) error {
@@ -140,9 +147,9 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetail, err er
 			continue
 		}
 		postDetail := &models.ApiPostDetail{
-			AuthorName: user.NickName,
-			VoteNum: voteData[idx],
-			Post: post,
+			AuthorName:      user.NickName,
+			VoteNum:         voteData[idx],
+			Post:            post,
 			CommunityDetail: community,
 		}
 		data = append(data, postDetail)

@@ -26,7 +26,7 @@ func CreateTag(name string) (err error) {
 	return
 }
 
-func CreateTag1(postID, tagID int64) (err error) {
+func CreateTagByPostId(postID, tagID int64) (err error) {
 	sqlStr := `insert into post_tag(post_id, tag_id) values (?, ?)`
 	_, err = db.Exec(sqlStr, postID, tagID)
 	return

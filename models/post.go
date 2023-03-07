@@ -9,6 +9,7 @@ type Post struct {
 	CommunityID int64 `json:"community_id" db:"community_id" binding:"required"` // 社区ID
 	Tag []int64 `json:"tag" binding:"required"`
 	Status int32 `json:"status" db:"status" swaggerignore:"true"`
+	Description string `json:"description" db:"description" binding:"required"`
 	Title string `json:"title" db:"title" binding:"required"` // 文章标题
 	Content string `json:"content" db:"content" binding:"required"` // 文章内容
 	CreateTime time.Time `json:"create_time" db:"create_time" swaggerignore:"true"`

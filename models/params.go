@@ -29,9 +29,11 @@ type EmailLogin struct {
 
 // ParamPost
 type ParamPost struct {
-	PostID int64 `json:"post_id" db:"post_id"`
+	PostID int64 `json:"post_id" db:"post_id" binding:"required"`
+	Tag []int64 `json:"tag" binding:"required"` // 标签
 	Title   string `json:"title" binding:"required"`   // 文章标题
 	Content string `json:"content" binding:"required"` // 文章内容
+	description string `json:"description" db:"description" binding:"required"`
 }
 
 // 帖子id和点赞两个参数

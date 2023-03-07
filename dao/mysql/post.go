@@ -10,8 +10,8 @@ import (
 
 // CreatePost 创建帖子
 func CreatePost(p *models.Post) (err error) {
-	sqlStr := `insert into post(post_id, title, content, author_id, community_id) values (?, ?, ?, ?, ?)`
-	_, err = db.Exec(sqlStr, p.ID, p.Title, p.Content, p.AuthorID, p.CommunityID)
+	sqlStr := `insert into post(post_id, title, description, content, author_id, community_id) values (?, ?, ?, ?, ?, ?)`
+	_, err = db.Exec(sqlStr, p.ID, p.Title, p.Description, p.Content, p.AuthorID, p.CommunityID)
 	return
 }
 
@@ -83,6 +83,20 @@ func DeletePostById(pid int64) (err error) {
 	n, err := ret.RowsAffected()
 	if n == 0 {
 		return ErrorPostNotExist
+	}
+	return
+}
+
+func DeleteTagByPostID(postID int64) (err error) {
+	sqlStr := `delete from post_tag where post_id = ?`
+	ret, err := db.Exec(sqlStr, postID)
+	if err != nil {
+		zap.L().Error("Delete failed", zap.Error(err))
+		return
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorTagNotExist
 	}
 	return
 }
