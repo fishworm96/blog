@@ -81,7 +81,7 @@ func UpdateTagHandler(c *gin.Context) {
 
 // DeleteTagHandler 删除标签接口
 func DeleteTagHandler(c *gin.Context) {
-	tidStr := c.Param("id")
+	tidStr := c.Param("ids")
 	tid, err := strconv.ParseInt(tidStr, 10, 64)
 	if err != nil {
 		zap.L().Error("delete tag with invalid param", zap.Int64("tid", tid), zap.Error(err))
