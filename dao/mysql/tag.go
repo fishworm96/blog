@@ -80,17 +80,17 @@ func GetTagsByPostId(pID int64) (tags []*models.Tag, err error) {
 	return
 }
 
-func GetPostByTagName(name string, page, size int64) (posts []*models.Post, err error) {
+func GetPostByTagId(id int64, page, size int64) (posts []*models.Post, err error) {
 	sqlStr := `
-	select p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time 
+	select distinct p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time 
 	from post p
 	inner join post_tag on p.post_id = post_tag.post_id
-	inner join tag on post_tag.tag_name = ?
+	inner join tag on post_tag.tag_id = ?
 	order by create_time desc limit ?, ?
 	`
 	posts = make([]*models.Post, 0, 2)
-	if err = db.Select(&posts, sqlStr, name, (page-1)*size, size); err != nil {
-		zap.L().Error("there is no post in db", zap.String("name", name), zap.Error(err))
+	if err = db.Select(&posts, sqlStr, id, (page-1)*size, size); err != nil {
+		zap.L().Error("there is no post in db", zap.Int64("id", id), zap.Error(err))
 		err = nil
 	}
 	return

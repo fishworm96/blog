@@ -23,9 +23,9 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		return
 	}
 	// 通过标签名称获取帖子信息
-	posts, err := mysql.GetPostByTagName(tag.Name, page, size)
+	posts, err := mysql.GetPostByTagId(tag.ID, page, size)
 	if err != nil {
-		zap.L().Error("mysql.GetPostByTagName(tag.Name) failed", zap.String("tag.Name", tag.Name), zap.Error(err))
+		zap.L().Error("mysql.GetPostByTagId(tag.ID) failed", zap.Int64("tag.ID", tag.ID), zap.Error(err))
 	}
 
 	postList := make([]*models.ApiPostList, 0, len(posts))
