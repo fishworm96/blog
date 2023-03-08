@@ -52,15 +52,29 @@ func GetTagByName(name string) (tag *models.Tag, err error) {
 	return
 }
 
-func GetTagByPostId(pid int64) (tags []*models.Tag, err error) {
+func GetTagNameByPostId(pID int64) (tags []string, err error) {
+	sqlStr := `
+	select distinct tag.tag_name
+	FROM post
+	INNER JOIN post_tag on ? = post_tag.post_id
+	INNER JOIN tag on post_tag.tag_id = tag.id
+	`
+	if err = db.Select(&tags, sqlStr, pID); err != nil {
+		zap.L().Error("there is no tag in db", zap.Int64("pid", pID), zap.Error(err))
+		err = nil
+	}
+	return
+}
+
+func GetTagsByPostId(pID int64) (tags []*models.Tag, err error) {
 	sqlStr := `
 	select distinct tag.id, tag.tag_name
 	FROM post
 	INNER JOIN post_tag on ? = post_tag.post_id
-	INNER JOIN tag on post_tag.tag_name = tag.tag_name
+	INNER JOIN tag on post_tag.tag_id = tag.id
 	`
-	if err = db.Select(&tags, sqlStr, pid); err != nil {
-		zap.L().Error("there is no tag in db", zap.Int64("pid", pid), zap.Error(err))
+	if err = db.Select(&tags, sqlStr, pID); err != nil {
+		zap.L().Error("there is no tag in db", zap.Int64("pid", pID), zap.Error(err))
 		err = nil
 	}
 	return

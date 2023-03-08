@@ -7,7 +7,7 @@ type Tag struct {
 
 // ApiPostDetail 标签详情接口的结构体
 type ApiTagDetail struct {
-	Id   int64  `json:"id"`
-	Name string `json:"name" binding:"required"`
-	Post []*ApiPostDetail `json:"post"`
+	Id   int64          `json:"id"`
+	Name string         `json:"name" binding:"required"`
+	Post []*ApiPostList `json:"post"`
 }
