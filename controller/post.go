@@ -191,16 +191,16 @@ func UpdatePostHandler(c *gin.Context) {
 // @Router /post/delete/{id} [delete]
 func DeletePostHandler(c *gin.Context) {
 	// 获取参数
-	params := new(models.ParamsID)
-	if err := c.ShouldBindJSON(&params); err != nil {
-		zap.L().Error("delete post with invalid param", zap.Any("params", params), zap.Error(err))
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete post with invalid param", zap.Int64("id", id), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-	pid := params.ID
 	// 根据id删除文章
-	if err := logic.DeletePostById(pid); err != nil {
-		zap.L().Error("logic.DeletePostById(pid) failed", zap.Int64("pid", pid), zap.Error(err))
+	if err := logic.DeletePostById(id); err != nil {
+		zap.L().Error("logic.DeletePostById(id) failed", zap.Int64("id", id), zap.Error(err))
 		if errors.Is(err, mysql.ErrorPostNotExist) {
 			ResponseError(c, CodePostNotExist)
 			return

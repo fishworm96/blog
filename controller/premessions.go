@@ -127,13 +127,13 @@ func UpdateMenuHandler(c *gin.Context) {
 
 // 删除菜单
 func DeleteMenuHandler(c *gin.Context) {
-	params := new(models.ParamsID)
-	if err := c.ShouldBindJSON(&params); err != nil {
-		zap.L().Error("delete post detail with invalid param", zap.Any("params", params), zap.Error(err))
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete post detail with invalid param", zap.Int64("id", id), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-	id := params.ID
 	state, err := logic.DeleteMenu(id)
 	if err != nil {
 		zap.L().Error("logic.DeleteMenu(id) failed", zap.Error(err))

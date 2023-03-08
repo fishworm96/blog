@@ -5,6 +5,7 @@ import (
 	"blog/logic"
 	"blog/models"
 	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -80,16 +81,16 @@ func UpdateTagHandler(c *gin.Context) {
 
 // DeleteTagHandler 删除标签接口
 func DeleteTagHandler(c *gin.Context) {
-	params := new(models.ParamsID)
-	if err := c.ShouldBindJSON(params); err != nil {
-		zap.L().Error("delete tag with invalid param", zap.Any("params", params), zap.Error(err))
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete tag with invalid param", zap.Int64("id", id), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-	tid := params.ID
 	// 根据id删除标签
-	if err := logic.DeleteTagById(tid); err != nil {
-		zap.L().Error("logic.DeleteTagById(tid) failed", zap.Int64("tid", tid), zap.Error(err))
+	if err := logic.DeleteTagById(id); err != nil {
+		zap.L().Error("logic.DeleteTagById(id) failed", zap.Int64("id", id), zap.Error(err))
 		if errors.Is(err, mysql.ErrorTagNotExist) {
 			ResponseError(c, CodeTagNotExist)
 			return
