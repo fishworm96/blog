@@ -102,6 +102,9 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostList, err error)
 
 func UpdatePost(p *models.ParamPost) (err error) {
 	err = mysql.UpdatePost(p)
+	if err != nil {
+		return err
+	}
 	err = mysql.DeleteTagByPostID(p.PostID)
 	for _, tag := range p.Tag {
 		err = mysql.CreateTagByPostId(p.PostID, tag)
