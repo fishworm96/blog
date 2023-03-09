@@ -42,7 +42,7 @@ func AddPostTag(postTag *models.ParamPostAndTag) (err error) {
 // GetPostById 根据帖子id获取信息
 func GetPostById(pid int64) (post *models.Post, err error) {
 	post = new(models.Post)
-	sqlStr := `select post_id, title, content, author_id, community_id, create_time from post where post_id = ?`
+	sqlStr := `select post_id, title, description, content, author_id, community_id, create_time from post where post_id = ?`
 	err = db.Get(post, sqlStr, pid)
 	if err != nil {
 		return nil, ErrorPostNotExist
@@ -60,15 +60,15 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 
 // UpdatePost 更新文章信息
 func UpdatePost(p *models.ParamPost) (err error) {
-	sqlStr := `update post set title = ?, content = ? where post_id = ?`
-	ret, err := db.Exec(sqlStr, p.Title, p.Content, p.PostID)
+	sqlStr := `update post set community_id = ?, title = ?, content = ?, description = ? where post_id = ?`
+	ret, err := db.Exec(sqlStr, p.CommunityID, p.Title, p.Content, p.Description, p.PostID)
 	if err != nil {
 		zap.L().Error("Update failed", zap.Error(err))
 		return ErrorUpdateFailed
 	}
 	n, err := ret.RowsAffected()
 	if n == 0 {
-		return ErrorPostNotExist
+		return
 	}
 	return
 }

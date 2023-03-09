@@ -115,9 +115,16 @@ func UpdatePost(p *models.ParamPost) (err error) {
 	if err != nil {
 		return err
 	}
-	err = mysql.DeleteTagByPostID(p.PostID)
+	ID, err := strconv.ParseInt(p.PostID, 10, 64)
+	if err != nil {
+		return
+	}
+	err = mysql.DeleteTagByPostID(ID)
+	if err != nil {
+		return
+	}
 	for _, tag := range p.Tag {
-		err = mysql.CreateTagByPostId(p.PostID, tag)
+		err = mysql.CreateTagByPostId(ID, tag)
 		if err != nil {
 			return
 		}

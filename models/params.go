@@ -29,11 +29,12 @@ type EmailLogin struct {
 
 // ParamPost
 type ParamPost struct {
-	PostID int64 `json:"post_id" db:"post_id" binding:"required"`
+	CommunityID int64 `json:"community_id" db:"community_id" binding:"required"`
 	Tag []int64 `json:"tag" binding:"required"` // 标签
+	PostID string `json:"post_id" db:"post_id" binding:"required"`
 	Title   string `json:"title" binding:"required"`   // 文章标题
 	Content string `json:"content" binding:"required"` // 文章内容
-	description string `json:"description" db:"description" binding:"required"`
+	Description string `json:"description" db:"description" binding:"required"`
 }
 
 // 帖子id和点赞两个参数
