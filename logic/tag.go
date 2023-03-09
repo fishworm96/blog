@@ -3,6 +3,7 @@ package logic
 import (
 	"blog/dao/mysql"
 	"blog/models"
+	"strconv"
 
 	"go.uber.org/zap"
 )
@@ -43,7 +44,11 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 			zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID), failed", zap.Int64("post.CommunityID", post.CommunityID))
 			continue
 		}
-		tags, err := mysql.GetTagNameByPostId(post.ID)
+		ID, err := strconv.ParseInt(post.ID, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		tags, err := mysql.GetTagNameByPostId(ID)
 		if err != nil {
 			return nil, err
 		}

@@ -5,16 +5,18 @@ import (
 	"blog/dao/redis"
 	"blog/models"
 	"blog/pkg/snowflake"
+	"strconv"
 
 	"go.uber.org/zap"
 )
 
 func CreatePost(p *models.Post) (err error) {
 	// 生成post id
-	p.ID = snowflake.GenID()
+	ID := snowflake.GenID()
+	p.ID = strconv.FormatInt(ID, 10)
 	// 保存到数据库
 	for _, tagId := range p.Tag {
-		err = mysql.CreateTagByPostId(p.ID, tagId)
+		err = mysql.CreateTagByPostId(ID, tagId)
 		if err != nil {
 			return err
 		}
@@ -23,7 +25,7 @@ func CreatePost(p *models.Post) (err error) {
 	if err != nil {
 		return err
 	}
-	err = redis.CreatePost(p.ID, p.CommunityID)
+	err = redis.CreatePost(ID, p.CommunityID)
 	return
 }
 
@@ -51,7 +53,11 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 		zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID) failed", zap.Int64("post.communityID", post.CommunityID), zap.Error(err))
 		return
 	}
-	tags, err := mysql.GetTagsByPostId(post.ID)
+	ID, err := strconv.ParseInt(post.ID, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	tags, err := mysql.GetTagsByPostId(ID)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +66,7 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 		AuthorName:      user.NickName,
 		Post:            post,
 		CommunityDetail: community,
-		Tag: tags,
+		Tag:             tags,
 	}
 	return
 }
@@ -85,7 +91,11 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostList, err error)
 			zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID), failed", zap.Int64("post.CommunityID", post.CommunityID))
 			continue
 		}
-		tags, err := mysql.GetTagNameByPostId(post.ID)
+		ID, err := strconv.ParseInt(post.ID, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		tags, err := mysql.GetTagNameByPostId(ID)
 		if err != nil {
 			return nil, err
 		}
