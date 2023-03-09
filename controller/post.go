@@ -4,6 +4,7 @@ import (
 	"blog/dao/mysql"
 	"blog/logic"
 	"blog/models"
+	"blog/pkg/tools"
 	"errors"
 	"strconv"
 
@@ -244,5 +245,30 @@ func GetPostListHandler2(c *gin.Context) {
 	}
 
 	// 返回响应
+	ResponseSuccess(c, data)
+}
+
+func UploadImage(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	extName, ok := tools.SuffixName(file)
+	if !ok {
+		zap.L().Error("tools.SuffixName(file) failed", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeFileSuffixNotLegal)
+		return
+	}
+
+	data, err := logic.UploadImage(file, extName)
+	if err != nil {
+		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
+		ResponseError(c, CodeUploadFailed)
+		return
+	}
+	
 	ResponseSuccess(c, data)
 }

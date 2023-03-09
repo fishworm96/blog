@@ -151,8 +151,8 @@ func GetUserInfoListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-// UploadImage 上传头像
-func UploadImage(c *gin.Context) {
+// UploadAvatar 上传头像
+func UploadAvatar(c *gin.Context) {
 	params := new(models.ParamsID)
 	if err := c.ShouldBindJSON(&params); err != nil {
 		zap.L().Error("get role with param", zap.Any("params", params), zap.Error(err))
@@ -162,7 +162,7 @@ func UploadImage(c *gin.Context) {
 
 	file, err := c.FormFile("file")
 	if err != nil {
-		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
+		zap.L().Error("upload Avatar with invalid param", zap.Any("file", file), zap.Error(err))
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
@@ -173,14 +173,14 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 	id := params.ID
-	dst, err := logic.UploadImage(file, extName, id)
+	dst, err := logic.UploadAvatar(file, extName, id)
 	if err != nil {
-		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
+		zap.L().Error("logic.UploadAvatar(file) failed", zap.Any("file", file), zap.Error(err))
 		if errors.Is(err, mysql.ErrorUserNotExist) {
 			ResponseError(c, CodeUserNotExist)
 			return
 		}
-		ResponseError(c, CodeUpdateFailed)
+		ResponseError(c, CodeUploadFailed)
 		return
 	}
 	c.SaveUploadedFile(file, dst)

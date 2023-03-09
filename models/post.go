@@ -33,3 +33,7 @@ type ApiPostDetail struct {
 	*Post                               // 嵌入帖子结构体
 	*CommunityDetail `json:"community"` // 嵌入社区信息
 }
+
+type ApiImage struct {
+	Url string `json:"url"`
+}

@@ -5,8 +5,13 @@ import (
 	"blog/dao/redis"
 	"blog/models"
 	"blog/pkg/snowflake"
+	"blog/setting"
+	"context"
+	"mime/multipart"
 	"strconv"
 
+	"github.com/qiniu/go-sdk/v7/auth/qbox"
+	"github.com/qiniu/go-sdk/v7/storage"
 	"go.uber.org/zap"
 )
 
@@ -242,5 +247,41 @@ func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostList, err er
 		zap.L().Error("GetCommunityListNew failed", zap.Error(err))
 		return nil, err
 	}
+	return
+}
+
+func UploadImage(file *multipart.FileHeader, extName string) (data models.ApiImage, err error) {
+	src, err := file.Open()
+	if err != nil {
+		return
+	}
+	defer src.Close()
+
+	putPlicy := storage.PutPolicy{
+		Scope: setting.Conf.Bucket,
+	}
+	mac := qbox.NewMac(setting.Conf.AccessKey, setting.Conf.SecretKey)
+
+	upToken := putPlicy.UploadToken(mac)
+
+	cfg := storage.Config{
+		Zone: &storage.ZoneHuadong,
+		UseCdnDomains: false,
+		UseHTTPS: false,
+	}
+	formUploader := storage.NewFormUploader(&cfg)
+
+	ret := storage.PutRet{}
+	putExtra := storage.PutExtra{}
+
+	key := "image/" + file.Filename
+
+	err = formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra)
+
+	if err != nil {
+		return
+	}
+
+	data.Url = setting.Conf.ImgUrl + ret.Key
 	return
 }

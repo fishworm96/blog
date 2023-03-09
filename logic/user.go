@@ -70,7 +70,7 @@ func GetUserInfoList() (info []*models.UserInfo, err error) {
 	return mysql.GetUserInfoList()
 }
 
-func UploadImage(file *multipart.FileHeader, extName string, userID int64) (string, error) {
+func UploadAvatar(file *multipart.FileHeader, extName string, userID int64) (string, error) {
 	// 上传到服务器
 	// var host string
 	// port := ":" + strconv.Itoa(setting.Conf.Port)
@@ -114,13 +114,13 @@ func UploadImage(file *multipart.FileHeader, extName string, userID int64) (stri
 
 	// 配置参数
 	cfg := storage.Config{
-		Zone: &storage.ZoneHuadong, // 华东区
+		Zone:          &storage.ZoneHuadong, // 华东区
 		UseCdnDomains: false,
-		UseHTTPS: false, // 非https
+		UseHTTPS:      false, // 非https
 	}
 	formUploader := storage.NewFormUploader(&cfg)
 
-	ret := storage.PutRet{} // 上传后返回的结果
+	ret := storage.PutRet{}        // 上传后返回的结果
 	putExtra := storage.PutExtra{} // 额外参数
 
 	// 上传自定义 Key ，可以指定上传目录及文件名和后缀
