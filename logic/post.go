@@ -5,6 +5,7 @@ import (
 	"blog/dao/redis"
 	"blog/models"
 	"blog/pkg/snowflake"
+	"blog/pkg/tools"
 	"blog/setting"
 	"context"
 	"mime/multipart"
@@ -35,7 +36,7 @@ func CreatePost(p *models.Post) (err error) {
 }
 
 func AddPostTag(postTag *models.ParamPostAndTag) error {
-	return mysql.AddPostTag(postTag)
+	return mysql.CreatePostTag(postTag)
 }
 
 // GetPostById 根据帖子id查询帖子详情数据
@@ -250,7 +251,13 @@ func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostList, err er
 	return
 }
 
-func UploadImage(file *multipart.FileHeader, extName string) (data models.ApiImage, err error) {
+func UploadImage(file *multipart.FileHeader, extName, md5 string) (data models.ApiImage, err error) {
+	url, err := mysql.GetImageByMd5(md5)
+	if url != "" {
+		data.Url = url
+		return
+	}
+
 	src, err := file.Open()
 	if err != nil {
 		return
@@ -265,16 +272,16 @@ func UploadImage(file *multipart.FileHeader, extName string) (data models.ApiIma
 	upToken := putPlicy.UploadToken(mac)
 
 	cfg := storage.Config{
-		Zone: &storage.ZoneHuadong,
+		Zone:          &storage.ZoneHuadong,
 		UseCdnDomains: false,
-		UseHTTPS: false,
+		UseHTTPS:      false,
 	}
 	formUploader := storage.NewFormUploader(&cfg)
 
 	ret := storage.PutRet{}
 	putExtra := storage.PutExtra{}
 
-	key := "image/" + file.Filename
+	key := "image/" + strconv.FormatInt(tools.GetUnix(), 10)
 
 	err = formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra)
 
@@ -283,5 +290,6 @@ func UploadImage(file *multipart.FileHeader, extName string) (data models.ApiIma
 	}
 
 	data.Url = "http://" + setting.Conf.ImgUrl + ret.Key
+	mysql.CreateImageUrl(data.Url, md5)
 	return
 }

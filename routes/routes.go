@@ -42,8 +42,8 @@ func Setup(mode string) *gin.Engine {
 	{
 		v1.GET("/info/:id", controller.GetUserInfoHandler)
 		v1.GET("/infoList", controller.GetUserInfoListHandler)
-		v1.PATCH("/upload_avatar", controller.UploadAvatar)
-		v1.PATCH("/upload_image", controller.UploadImage)
+		v1.POST("/upload_avatar", controller.UploadAvatar)
+		v1.POST("/upload_image", controller.UploadImage)
 	}
 	{
 		v1.GET("/role/:id", controller.GetRoleInfoHandler)

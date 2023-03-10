@@ -37,3 +37,7 @@ type ApiPostDetail struct {
 type ApiImage struct {
 	Url string `json:"url"`
 }
+
+type ApiMd5 struct {
+	Md5 string `json:"md5" db:"md5" binding:"required"`
+}

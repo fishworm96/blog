@@ -15,7 +15,7 @@ func CreatePost(p *models.Post) (err error) {
 	return
 }
 
-func AddPostTag(postTag *models.ParamPostAndTag) (err error) {
+func CreatePostTag(postTag *models.ParamPostAndTag) (err error) {
 	sqlStr := `
 	insert into post_tag(post_id, tag_name)
 	SELECT ?, ?
@@ -109,5 +109,35 @@ func GetPostListByIDs(ids []string) (postList []*models.Post, err error) {
 	}
 	query = db.Rebind(query)
 	err = db.Select(&postList, query, args...)
+	return
+}
+
+// 使用md5获取图片地址
+func GetImageByMd5(md5 string) (url string, err error) {
+	sqlStr := `select count(image_url) max(image_url) from image where md5 = ?`
+	var count int
+	if err = db.QueryRow(sqlStr, md5).Scan(&count, &url); err != nil {
+		return
+	}
+	if count > 0 {
+		return
+	} else {
+		url = ""
+	}
+	return 
+}
+
+// 插入图片地址和 MD5
+func CreateImageUrl(url, md5 string) (err error) {
+	sqlStr := `insert into image(image_url, md5) values(?, ?)`
+	ret, err := db.Exec(sqlStr, url, md5)
+	if err != nil {
+		zap.L().Error("add image url failed", zap.Error(err))
+		return ErrorImageUrFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorImageUrFailed
+	}
 	return
 }

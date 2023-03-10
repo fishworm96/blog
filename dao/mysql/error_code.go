@@ -11,6 +11,7 @@ var (
 	ErrorAddFailed = errors.New("添加失败")
 	ErrorUpdateFailed = errors.New("更新失败")
 	ErrorDeleteFailed = errors.New("删除失败")
+	ErrorImageUrFailed = errors.New("上传失败")
 	ErrorPostNotExist = errors.New("帖子不存在")
 	ErrorTagExist = errors.New("标签已存在")
 	ErrorTagNotExist = errors.New("标签不存在")

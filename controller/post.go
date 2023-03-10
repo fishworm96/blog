@@ -249,6 +249,13 @@ func GetPostListHandler2(c *gin.Context) {
 }
 
 func UploadImage(c *gin.Context) {
+	md5 := c.PostForm("md5")
+	if md5 == "" {
+		zap.L().Error("upload Image with invalid param", zap.String("md5", md5))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
 	file, err := c.FormFile("file")
 	if err != nil {
 		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
@@ -263,7 +270,7 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	data, err := logic.UploadImage(file, extName)
+	data, err := logic.UploadImage(file, extName, md5)
 	if err != nil {
 		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
 		ResponseError(c, CodeUploadFailed)
