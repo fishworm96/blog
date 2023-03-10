@@ -124,14 +124,14 @@ func UploadAvatar(file *multipart.FileHeader, extName string, userID int64) (str
 	putExtra := storage.PutExtra{} // 额外参数
 
 	// 上传自定义 Key ，可以指定上传目录及文件名和后缀
-	key := "image/" + file.Filename // 上传路径，如果当前目录中已存在相同文件，则返回失败错误
+	key := "avatar/" + file.Filename // 上传路径，如果当前目录中已存在相同文件，则返回失败错误
 	err = formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra)
 
 	if err != nil {
 		return "", err
 	}
 
-	url := setting.Conf.ImgUrl + ret.Key
+	url := "http://" + setting.Conf.ImgUrl + ret.Key
 
 	return url, mysql.EditAvatar(url, userID)
 }

@@ -282,6 +282,6 @@ func UploadImage(file *multipart.FileHeader, extName string) (data models.ApiIma
 		return
 	}
 
-	data.Url = setting.Conf.ImgUrl + ret.Key
+	data.Url = "http://" + setting.Conf.ImgUrl + ret.Key
 	return
 }
