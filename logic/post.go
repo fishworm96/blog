@@ -253,7 +253,7 @@ func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostList, err er
 
 func UploadImage(file *multipart.FileHeader, extName, md5 string) (data models.ApiImage, err error) {
 	url, err := mysql.GetImageByMd5(md5)
-	if url != "" {
+	if len(url) > 0 {
 		data.Url = url
 		return
 	}

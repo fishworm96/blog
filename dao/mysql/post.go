@@ -114,16 +114,8 @@ func GetPostListByIDs(ids []string) (postList []*models.Post, err error) {
 
 // 使用md5获取图片地址
 func GetImageByMd5(md5 string) (url string, err error) {
-	sqlStr := `select count(image_url) max(image_url) from image where md5 = ?`
-	var count int
-	if err = db.QueryRow(sqlStr, md5).Scan(&count, &url); err != nil {
-		return
-	}
-	if count > 0 {
-		return
-	} else {
-		url = ""
-	}
+	sqlStr := `select image_url from image where md5 = ?`
+	db.Get(&url, sqlStr, md5)
 	return 
 }
 
