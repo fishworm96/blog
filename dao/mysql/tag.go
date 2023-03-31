@@ -82,7 +82,7 @@ func GetTagsByPostId(pID int64) (tags []*models.Tag, err error) {
 
 func GetPostByTagId(id int64, page, size int64) (posts []*models.Post, err error) {
 	sqlStr := `
-	select distinct p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time 
+	select distinct p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time, p.update_time 
 	from post p
 	inner join post_tag on p.post_id = post_tag.post_id
 	inner join tag on post_tag.tag_id = ?
