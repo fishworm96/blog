@@ -58,6 +58,13 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 	return
 }
 
+func GetPostListByCommunityID(id, page, size int64) (posts []*models.Post, err error) {
+	sqlStr := `select post_id, title, content, description, author_id, community_id, create_time, update_time from post where community_id = ? order by create_time desc limit ?, ?`
+	posts = make([]*models.Post, 0, 10)
+	err = db.Select(&posts, sqlStr, id, (page - 1) * size, size)
+	return
+}
+
 // UpdatePost 更新文章信息
 func UpdatePost(p *models.ParamPost) (err error) {
 	sqlStr := `update post set community_id = ?, title = ?, content = ?, description = ? where post_id = ?`

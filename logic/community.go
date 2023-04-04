@@ -15,10 +15,11 @@ func GetCommunityList() (community []*models.Community, err error) {
 
 //  GetCommunityDetail 根据id获取列表数据
 func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err error) {
-	posts, err := mysql.GetPostList(page, size)
+	posts, err := mysql.GetPostListByCommunityID(id, page, size)
 	if err != nil {
 		return nil, err
 	}
+	
 	data = new(models.CommunityPost)
 
 	for _, post := range posts {
@@ -33,15 +34,18 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 		if err != nil {
 			return nil, err
 		}
+
 		tags, err := mysql.GetTagNameByPostId(ID)
 		if err != nil {
 			return nil, err
 		}
+
 		postDetail := &models.ApiPostDetailList{
 			AuthorName:      user.NickName,
 			Post:            post,
 			Tag:             tags,
 		}
+
 		data.ApiPostDetailList = append(data.ApiPostDetailList, postDetail)
 	}
 
@@ -56,7 +60,7 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 		zap.L().Error("mysql.GetCommunityDetail(), failed", zap.Error(err))
 		return
 	}
-	
+
 	data.CommunityDetail = community
 	data.TotalPages = totalPages
 	return
