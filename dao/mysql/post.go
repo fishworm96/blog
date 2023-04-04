@@ -112,14 +112,14 @@ func GetPostListByIDs(ids []string) (postList []*models.Post, err error) {
 	return
 }
 
-// 使用md5获取图片地址
+// GetImageByMd5 使用md5获取图片地址
 func GetImageByMd5(md5 string) (url string, err error) {
 	sqlStr := `select image_url from image where md5 = ?`
 	db.Get(&url, sqlStr, md5)
 	return 
 }
 
-// 插入图片地址和 MD5
+// CreateImageUrl 插入图片地址和 MD5
 func CreateImageUrl(url, md5 string) (err error) {
 	sqlStr := `insert into image(image_url, md5) values(?, ?)`
 	ret, err := db.Exec(sqlStr, url, md5)
@@ -131,5 +131,12 @@ func CreateImageUrl(url, md5 string) (err error) {
 	if n == 0 {
 		return ErrorImageUrFailed
 	}
+	return
+}
+
+// GetTotalPages 文章总数
+func GetTotalPages() (totalPages int64, err error) {
+	sqlStr := `select count(id) from post`
+	err = db.Get(&totalPages, sqlStr)
 	return
 }

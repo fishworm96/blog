@@ -128,3 +128,10 @@ func DeleteTagById(tid int64) (err error) {
 	}
 	return
 }
+
+// GetTotalTag 标签总数
+func GetTotalTag() (totalTag int64, err error) {
+	sqlStr := `select count(id) from tag`
+	err = db.Get(&totalTag, sqlStr)
+	return
+}

@@ -28,8 +28,11 @@ func CommunityDetailHandler(c *gin.Context) {
 		return
 	}
 
+	// 获取分页参数
+	page, size := getPageInfo(c)
+
 	// 根据id获取社区详情
-	data, err := logic.GetCommunityDetail(id)
+	data, err := logic.GetCommunityDetail(id, page, size)
 	if err != nil {
 		zap.L().Error("logic.GetCommunityDetail() failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)

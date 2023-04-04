@@ -36,3 +36,9 @@ func GetCommunityDetailById(id int64) (community *models.CommunityDetail, err er
 	err = db.Get(community, sqlStr, id)
 	return
 }
+
+func GetTotalCategory() (totalCategory int64, err error) {
+	sqlStr := `select count(id) from community`
+	err = db.Get(&totalCategory, sqlStr)
+	return
+}
