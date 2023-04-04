@@ -23,6 +23,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		zap.L().Error("mysql.GetTagByName(name) failed", zap.Error(err))
 		return
 	}
+
 	// 通过标签名称获取帖子信息
 	posts, err := mysql.GetPostByTagId(tag.ID, page, size)
 	if err != nil {
@@ -65,10 +66,13 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		Name: tag.Name,
 		Post: postList,
 	}
-	// data = new(models.ApiTagDetail)
-	// data.Id = tag.Id
-	// data.Name = tag.Name
-	// data.Post = postList
+	totalTag, err := mysql.GetTotalByTag(name)
+	if err != nil {
+		zap.L().Error("mysql.GetTotalByTag(name) failed", zap.String("tagName", name))
+		return
+	}
+	data.TotalPages = totalTag
+	
 	return
 }
 

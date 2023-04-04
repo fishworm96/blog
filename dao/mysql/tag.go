@@ -82,7 +82,7 @@ func GetTagsByPostId(pID int64) (tags []*models.Tag, err error) {
 
 func GetPostByTagId(id int64, page, size int64) (posts []*models.Post, err error) {
 	sqlStr := `
-	select distinct p.post_id, p.title, p.content, p.author_id, p.community_id, p.create_time, p.update_time 
+	select distinct p.post_id, p.description, p.title, p.content, p.author_id, p.community_id, p.create_time, p.update_time 
 	from post p
 	inner join post_tag on p.post_id = post_tag.post_id
 	inner join tag on post_tag.tag_id = ?
@@ -126,6 +126,15 @@ func DeleteTagById(tid int64) (err error) {
 	if err != nil {
 		return err
 	}
+	return
+}
+
+// GetTotalByTag 根据tag获取post数量
+func GetTotalByTag(tag string) (totalTag int64, err error) {
+	sqlStr := `select count(tag_id) from post_tag where tag_id = (
+		select id from tag where tag_name = ?
+	)`
+	err = db.Get(&totalTag, sqlStr, tag)
 	return
 }
 

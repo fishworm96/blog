@@ -10,4 +10,5 @@ type ApiTagDetail struct {
 	Id   int64          `json:"id"`
 	Name string         `json:"name" binding:"required"`
 	Post []*ApiPostDetailList `json:"post"`
+	TotalPages int64 `json:"total_pages"`
 }
