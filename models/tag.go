@@ -9,5 +9,5 @@ type Tag struct {
 type ApiTagDetail struct {
 	Id   int64          `json:"id"`
 	Name string         `json:"name" binding:"required"`
-	Post []*ApiPostList `json:"post"`
+	Post []*ApiPostDetailList `json:"post"`
 }

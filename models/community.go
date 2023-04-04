@@ -9,7 +9,13 @@ type Community struct {
 
 type CommunityDetail struct {
 	Community
-	Introduction string `json:"introduction,omitempty" db:"introduction"` // 过滤为空
-	CreateTime   time.Time `json:"create_time" db:"create_time"`
-	UpdateTime time.Time `json:"update_time" db:"update_time"`
+	Introduction string     `json:"introduction,omitempty" db:"introduction"` // 过滤为空
+	CreateTime   time.Time  `json:"create_time" db:"create_time"`
+	UpdateTime   time.Time  `json:"update_time" db:"update_time"`
+}
+
+type CommunityPost struct {
+	CommunityDetail   *CommunityDetail     `json:"community_detail"`
+	ApiPostDetailList []*ApiPostDetailList `json:"post_list"`
+	TotalPages        int64                `json:"total_pages"`
 }

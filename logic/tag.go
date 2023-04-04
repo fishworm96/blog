@@ -29,7 +29,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		zap.L().Error("mysql.GetPostByTagId(tag.ID) failed", zap.Int64("tag.ID", tag.ID), zap.Error(err))
 	}
 
-	postList := make([]*models.ApiPostList, 0, len(posts))
+	postList := make([]*models.ApiPostDetailList, 0, len(posts))
 
 	for _, post := range posts {
 		// 根据作者id查询作者信息
@@ -52,7 +52,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		if err != nil {
 			return nil, err
 		}
-		postDetail := &models.ApiPostList{
+		postDetail := &models.ApiPostDetailList{
 			AuthorName:      user.NickName,
 			Post:            post,
 			CommunityDetail: community,

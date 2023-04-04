@@ -18,11 +18,10 @@ type Post struct {
 
 // ApiPostList 帖子列表接口的结构体
 type ApiPostList struct {
-	AuthorName       string             `json:"author_name"`
-	Tag              []string           `json:"tag"`
-	VoteNum          int64              `json:"vote_num"`
-	*Post                               // 嵌入帖子结构体
-	*CommunityDetail `json:"community"` // 嵌入社区信息
+	ApiPostDetailList []*ApiPostDetailList `json:"post_list"`
+	TotalPages int64 `json:"total_pages"`
+	TotalTag int64 `json:"total_tag"`
+	TotalCategory int64 `json:"total_category"`
 }
 
 // APiPostDetail 帖子接口的结构体
@@ -32,6 +31,16 @@ type ApiPostDetail struct {
 	VoteNum          int64              `json:"vote_num"`
 	*Post                               // 嵌入帖子结构体
 	*CommunityDetail `json:"community"` // 嵌入社区信息
+}
+
+// ApiPostDetailList 帖子列表详情的结构体
+type ApiPostDetailList struct {
+	AuthorName       string             `json:"author_name"`
+	Tag              []string           `json:"tag"`
+	VoteNum          int64              `json:"vote_num"`
+	*Post                               // 嵌入帖子结构体
+	*CommunityDetail `json:"community"` // 嵌入社区信息
+	TotalPages int64 `json:"total_pages"`
 }
 
 type ApiImage struct {

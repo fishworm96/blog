@@ -77,12 +77,12 @@ func GetPostById(pid int64) (data *models.ApiPostDetail, err error) {
 	return
 }
 
-func GetPostList(page int64, size int64) (data []*models.ApiPostList, err error) {
+func GetPostList(page int64, size int64) (data *models.ApiPostList, err error) {
 	posts, err := mysql.GetPostList(page, size)
 	if err != nil {
 		return nil, err
 	}
-	data = make([]*models.ApiPostList, 0, len(posts))
+	data = new(models.ApiPostList)
 
 	for _, post := range posts {
 		// 根据作者id查询作者信息
@@ -105,14 +105,28 @@ func GetPostList(page int64, size int64) (data []*models.ApiPostList, err error)
 		if err != nil {
 			return nil, err
 		}
-		postDetail := &models.ApiPostList{
+		postDetail := &models.ApiPostDetailList{
 			AuthorName:      user.NickName,
 			Post:            post,
 			CommunityDetail: community,
 			Tag:             tags,
 		}
-		data = append(data, postDetail)
+		data.ApiPostDetailList = append(data.ApiPostDetailList, postDetail)
 	}
+	totalPages, err := mysql.GetTotalPages()
+	if err != nil {
+		zap.L().Error("mysql.GetTotalPages(), failed", zap.Error(err))
+		return
+	}
+	totalTag, err := mysql.GetTotalTag()
+	if err != nil {
+		zap.L().Error("mysql.GetTotalTag(), failed", zap.Error(err))
+		return
+	}
+	totalCategory, err := mysql.GetTotalCategory()
+	data.TotalPages = totalPages
+	data.TotalTag = totalTag
+	data.TotalCategory = totalCategory
 	return
 }
 
@@ -142,7 +156,7 @@ func DeletePostById(pid int64) error {
 	return mysql.DeletePostById(pid)
 }
 
-func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostList, err error) {
+func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostDetailList, err error) {
 	// 去redis查询id列表
 	ids, err := redis.GetPostIDsInOrder(p)
 	if err != nil {
@@ -177,7 +191,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostList, err erro
 			zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID) failed", zap.Int64("community_id", post.CommunityID), zap.Error(err))
 			continue
 		}
-		postDetail := &models.ApiPostList{
+		postDetail := &models.ApiPostDetailList{
 			AuthorName:      user.NickName,
 			VoteNum:         voteData[idx],
 			Post:            post,
@@ -188,7 +202,7 @@ func GetPostList2(p *models.ParamPostList) (data []*models.ApiPostList, err erro
 	return
 }
 
-func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostList, err error) {
+func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostDetailList, err error) {
 	// 去redis查询id列表
 	ids, err := redis.GetCommunityPostIDsInOrder(p)
 	if err != nil {
@@ -224,7 +238,7 @@ func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostList, 
 			zap.L().Error("mysql.GetCommunityDetailById(post.CommunityID) failed", zap.Int64("community_id", post.CommunityID), zap.Error(err))
 			continue
 		}
-		postDetail := &models.ApiPostList{
+		postDetail := &models.ApiPostDetailList{
 			AuthorName:      user.NickName,
 			VoteNum:         voteData[idx],
 			Post:            post,
@@ -235,7 +249,7 @@ func GetCommunityPostList(p *models.ParamPostList) (data []*models.ApiPostList, 
 	return
 }
 
-func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostList, err error) {
+func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostDetailList, err error) {
 	// 根据请求参数的不同，执行不同的逻辑
 	if p.CommunityID == 0 {
 		// 查所有
