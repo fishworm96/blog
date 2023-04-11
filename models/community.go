@@ -19,3 +19,9 @@ type CommunityPost struct {
 	ApiPostDetailList []*ApiPostDetailList `json:"post_list"`
 	TotalPages        int64                `json:"total_pages"`
 }
+
+type CommunityPostList struct {
+	ID int64 `json:"id" db:"community_id"`
+	Name string `json:"name" db:"community_name"`
+	Post []*Post `json:"post"`
+}

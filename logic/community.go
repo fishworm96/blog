@@ -9,17 +9,37 @@ import (
 )
 
 // GetCommunityList 获取列表数据
-func GetCommunityList() (community []*models.Community, err error) {
-	return mysql.GetCommunityList()
+func GetCommunityList() (data []*models.CommunityPostList, err error) {
+	communityList, err := mysql.GetCommunityList()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, community := range communityList {
+		posts, err := mysql.GetPostListByCommunityID(community.ID)
+		if err != nil {
+			zap.L().Error("mysql.GetPostListByCommunityID(community.ID) failed", zap.Int64("community.ID", community.ID), zap.Error(err))
+			continue
+		}
+
+		communityDetail := &models.CommunityPostList{
+			ID: community.ID,
+			Name: community.Name,
+			Post: posts,
+		}
+
+		data = append(data, communityDetail)
+	}
+	return
 }
 
 //  GetCommunityDetail 根据id获取列表数据
 func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err error) {
-	posts, err := mysql.GetPostListByCommunityID(id, page, size)
+	posts, err := mysql.GetPostListByCommunityIDWithPagination(id, page, size)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	data = new(models.CommunityPost)
 
 	for _, post := range posts {
@@ -41,9 +61,9 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 		}
 
 		postDetail := &models.ApiPostDetailList{
-			AuthorName:      user.NickName,
-			Post:            post,
-			Tag:             tags,
+			AuthorName: user.NickName,
+			Post:       post,
+			Tag:        tags,
 		}
 
 		data.ApiPostDetailList = append(data.ApiPostDetailList, postDetail)

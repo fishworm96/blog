@@ -54,14 +54,22 @@ func GetPostById(pid int64) (post *models.Post, err error) {
 func GetPostList(page, size int64) (posts []*models.Post, err error) {
 	sqlStr := `select post_id, title, content, description, author_id, community_id, create_time, update_time from post order by create_time desc limit ?, ?`
 	posts = make([]*models.Post, 0, 2)
-	err = db.Select(&posts, sqlStr, (page - 1) * size, size)
+	err = db.Select(&posts, sqlStr, (page-1)*size, size)
 	return
 }
 
-func GetPostListByCommunityID(id, page, size int64) (posts []*models.Post, err error) {
+// GetPostListByCommunityIDWithPagination 使用社区 id 分页信息获取信息
+func GetPostListByCommunityIDWithPagination(id, page, size int64) (posts []*models.Post, err error) {
 	sqlStr := `select post_id, title, content, description, author_id, community_id, create_time, update_time from post where community_id = ? order by create_time desc limit ?, ?`
 	posts = make([]*models.Post, 0, 10)
-	err = db.Select(&posts, sqlStr, id, (page - 1) * size, size)
+	err = db.Select(&posts, sqlStr, id, (page-1)*size, size)
+	return
+}
+
+func GetPostListByCommunityID(id int64) (posts []*models.Post, err error) {
+	sqlStr := `select post_id, title, content, description, author_id, community_id, create_time, update_time from post where community_id = ? order by create_time`
+	posts = make([]*models.Post, 0, 2)
+	err = db.Select(&posts, sqlStr, id)
 	return
 }
 
@@ -123,7 +131,7 @@ func GetPostListByIDs(ids []string) (postList []*models.Post, err error) {
 func GetImageByMd5(md5 string) (url string, err error) {
 	sqlStr := `select image_url from image where md5 = ?`
 	db.Get(&url, sqlStr, md5)
-	return 
+	return
 }
 
 // CreateImageUrl 插入图片地址和 MD5
