@@ -155,3 +155,10 @@ func GetTotalPages() (totalPages int64, err error) {
 	err = db.Get(&totalPages, sqlStr)
 	return
 }
+
+func SearchArticle(keyword string) (posts []*models.Post, err error) {
+	sqlStr := "SELECT post_id, title, description FROM post WHERE title LIKE ? OR description LIKE ?"
+	posts = make([]*models.Post, 0, 2)
+	err = db.Select(&posts, sqlStr, "%"+keyword+"%", "%"+keyword+"%")
+	return
+}

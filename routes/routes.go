@@ -37,6 +37,7 @@ func Setup(mode string) *gin.Engine {
 	v1.GET("/posts2", controller.GetPostListHandler2)
 	v1.GET("/tag", controller.GetTagListHandler)
 	v1.GET("/tag/:name", controller.GetTagDetailHandler)
+	v1.GET("/search", controller.SearchArticles)
 
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{

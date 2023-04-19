@@ -7,6 +7,7 @@ import (
 	"blog/pkg/tools"
 	"errors"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -277,5 +278,22 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 	
+	ResponseSuccess(c, data)
+}
+
+func SearchArticles(c *gin.Context) {
+	keyword := c.Query("keyword")
+	keyword = strings.Trim(keyword, " ")
+	if len(keyword) == 0 {
+		return
+	}
+
+	data, err := logic.SearchArticle(keyword)
+	if err != nil {
+		zap.L().Error("logic.SearchArticle(keyword) failed", zap.String("keyword", keyword), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
 	ResponseSuccess(c, data)
 }

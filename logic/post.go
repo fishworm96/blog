@@ -307,3 +307,7 @@ func UploadImage(file *multipart.FileHeader, extName, md5 string) (data models.A
 	mysql.CreateImageUrl(data.Url, md5)
 	return
 }
+
+func SearchArticle(keyword string) (data []*models.Post, err error) {
+	return mysql.SearchArticle(keyword)
+}
