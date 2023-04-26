@@ -1,2 +1,4 @@
 *.log
 tmp/main.exe
+conf/*
+bin/*
