@@ -29,24 +29,13 @@ func GetMenuHandler(c *gin.Context) {
 		ResponseSuccess(c, data)
 		return
 	}
-	data, err := logic.GetMenuList()
+	userID, err := getCurrentUserID(c)
 	if err != nil {
-		zap.L().Error("logic.GetMenuListHandler() failed", zap.Error(err))
-		ResponseError(c, CodeMenuNotExist)
+		zap.L().Error("getCurrentUserID(c) failed", zap.Any("userID", userID))
+		ResponseError(c, CodeNeedLogin)
 		return
 	}
-	ResponseSuccess(c, data)
-}
-
-func GetMenuListByUserIdHandler(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		zap.L().Error("get menu detail with invalid param", zap.Int64("id", id), zap.Error(err))
-		ResponseError(c, CodeInvalidParam)
-		return
-	}
-	data, err := logic.GetMenuByUserId(id)
+	data, err := logic.GetMenuByUserId(userID)
 	if err != nil {
 		zap.L().Error("logic.GetMenuByUserId(id) failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)

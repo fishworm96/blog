@@ -50,7 +50,7 @@ func UpdateRoleHandler(c *gin.Context) {
 	}
 
 	if err := logic.UpdateRoleMenu(r); err != nil {
-		zap.L().Error("logic.UpdateRoleMenu(r) failed", zap.Error(err))
+		zap.L().Error("logic.UpdateRoleMenu(r) failed", zap.Any("r", r), zap.Error(err))
 		if errors.Is(err, mysql.ErrorUpdateFailed) {
 			ResponseError(c, CodeUpdateFailed)
 			return

@@ -44,6 +44,15 @@ func getTreeRecursive(list []*models.MenuDetail, parentId int64) []*models.MenuD
 }
 
 func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
+	info, err := mysql.GetUserInfoByUserId(id)
+	if err != nil {
+		zap.L().Error("mysql.GetUserInfoByUserId(id) failed", zap.Int64("id", id), zap.Error(err))
+		return
+	}
+	if info.IsSuper == 1 {
+		data, err = GetMenuList()
+		return
+	}
 	menus, err := mysql.GetMenuByUserId(id)
 	data = getTreeRecursive(menus, 0)
 	return
