@@ -37,6 +37,7 @@ require (
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/goccy/go-json v0.9.11 // indirect
+	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/josharian/intern v1.0.0 // indirect

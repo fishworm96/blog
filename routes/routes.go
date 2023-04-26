@@ -4,6 +4,7 @@ import (
 	"blog/controller"
 	"blog/logger"
 	"blog/middlewares"
+	"blog/websocket"
 
 	_ "blog/docs" // 千万不要忘了导入把你上一步生成的docs
 
@@ -19,6 +20,11 @@ func Setup(mode string) *gin.Engine {
 		gin.SetMode(gin.ReleaseMode) // gin设置成发布模式
 	}
 	r := gin.New()
+
+	hub := websocket.NewHub()
+	go hub.Run()
+
+
 	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.Cors())
 
 	r.Static("/static", "./static")
@@ -38,6 +44,9 @@ func Setup(mode string) *gin.Engine {
 	v1.GET("/tag", controller.GetTagListHandler)
 	v1.GET("/tag/:name", controller.GetTagDetailHandler)
 	v1.GET("/search", controller.SearchArticles)
+	v1.GET("/ws", func(c *gin.Context) {
+		websocket.HttpController(c, hub)
+	})
 
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
