@@ -9,7 +9,11 @@ import (
 
 // GetCommunityList 获取社区列表
 func GetCommunityList() (communityList []*models.Community, err error) {
-	sqlStr := `select community_id, community_name from community`
+	sqlStr := `
+	SELECT c.id, c.name, i.image_url
+	FROM community c
+	INNER JOIN image i ON c.image_md5 = i.md5;
+	`
 	if err := db.Select(&communityList, sqlStr); err != nil {
 		zap.L().Error("there is no community in db")
 		err = nil
@@ -20,7 +24,7 @@ func GetCommunityList() (communityList []*models.Community, err error) {
 // GetCommunityDetail 获取社区详细信息
 func GetCommunityDetail(id int64) (community *models.CommunityDetail, err error) {
 	community = new(models.CommunityDetail)
-	sqlStr := `select community_id, community_name, introduction, create_time, update_time from community where community_id = ?`
+	sqlStr := `select id, name, introduction, create_time, update_time from community where id = ?`
 	if err = db.Get(community, sqlStr, id); err != nil {
 		if err == sql.ErrNoRows {
 			err = ErrorInvalidID
@@ -32,7 +36,7 @@ func GetCommunityDetail(id int64) (community *models.CommunityDetail, err error)
 // GetCommunityDetailById 根据社区id获取社区信息
 func GetCommunityDetailById(id int64) (community *models.CommunityDetail, err error) {
 	community = new(models.CommunityDetail)
-	sqlStr := `select community_id, community_name, introduction, create_time, update_time from community where community_id = ?`
+	sqlStr := `select id, name, introduction, create_time, update_time from community where id = ?`
 	err = db.Get(community, sqlStr, id)
 	return
 }

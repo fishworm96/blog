@@ -25,6 +25,7 @@ func GetCommunityList() (data []*models.CommunityPostList, err error) {
 		communityDetail := &models.CommunityPostList{
 			ID: community.ID,
 			Name: community.Name,
+			Image: community.Image,
 			Post: posts,
 		}
 

@@ -29,7 +29,7 @@ type EmailLogin struct {
 
 // ParamPost
 type ParamPost struct {
-	CommunityID int64 `json:"community_id" db:"community_id" binding:"required"`
+	CommunityID int64 `json:"community_id" db:"id" binding:"required"`
 	Tag []int64 `json:"tag" binding:"required"` // 标签
 	PostID string `json:"post_id" db:"post_id" binding:"required"`
 	Title   string `json:"title" binding:"required"`   // 文章标题
@@ -45,7 +45,7 @@ type ParamVoteData struct {
 }
 
 type ParamPostList struct {
-	CommunityID int64  `json:"community_id" form:"community_id"`   // 可以为空
+	CommunityID int64  `json:"community_id" form:"id"`   // 可以为空
 	Page        int64  `json:"page" form:"page" example:"1"`       // 页码
 	Size        int64  `json:"size" form:"size" example:"1"`       // 每页数据量
 	Order       string `json:"order" form:"order" example:"score"` // 排序依据

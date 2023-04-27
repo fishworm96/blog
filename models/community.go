@@ -3,8 +3,9 @@ package models
 import "time"
 
 type Community struct {
-	ID   int64  `json:"id" db:"community_id"`
-	Name string `json:"name" db:"community_name"`
+	ID   int64  `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
+	Image string `json:"image" db:"image_url"`
 }
 
 type CommunityDetail struct {
@@ -15,13 +16,14 @@ type CommunityDetail struct {
 }
 
 type CommunityPost struct {
-	CommunityDetail   *CommunityDetail     `json:"community_detail"`
+	CommunityDetail   *CommunityDetail     `json:"detail"`
 	ApiPostDetailList []*ApiPostDetailList `json:"post_list"`
 	TotalPages        int64                `json:"total_pages"`
 }
 
 type CommunityPostList struct {
-	ID int64 `json:"id" db:"community_id"`
-	Name string `json:"name" db:"community_name"`
+	ID int64 `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
+	Image string `json:"image"`
 	Post []*Post `json:"post"`
 }
