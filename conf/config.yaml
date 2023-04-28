@@ -7,8 +7,8 @@ machine_id: 1
 email_secret_code: ""
 access_key: ""
 secret_key: ""
-bucket: "blogoss0"
-img_url: "image.fishworm.top/"
+bucket: ""
+img_url: ""
 
 auth:
   jwt_expire: 8760
