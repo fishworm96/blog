@@ -46,3 +46,12 @@ func GetTotalCategory() (totalCategory int64, err error) {
 	err = db.Get(&totalCategory, sqlStr)
 	return
 }
+
+func CreateCommunity(c models.CommunityCreateDetail) (err error) {
+	sqlStr := `
+		INSERT INTO community(name, introduction, image_md5)
+		VALUES(?, ?, ?)
+	`
+	_, err = db.Exec(sqlStr, c.Name, c.Introduction, c.Md5)
+	return
+}

@@ -77,5 +77,8 @@ func Setup(mode string) *gin.Engine {
 		v1.PUT("/tag/edit", controller.UpdateTagHandler)
 		v1.DELETE("/tag/:id", controller.DeleteTagHandler)
 	}
+	{
+		v1.POST("/community", controller.CreateCommunity)
+	}
 	return r
 }

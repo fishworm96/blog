@@ -86,3 +86,7 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 	data.TotalPages = totalPages
 	return
 }
+
+func CreateCommunity(c models.CommunityCreateDetail) (err error) {
+	return mysql.CreateCommunity(c)
+}

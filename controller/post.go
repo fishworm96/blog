@@ -266,7 +266,7 @@ func UploadImage(c *gin.Context) {
 
 	extName, ok := tools.SuffixName(file)
 	if !ok {
-		zap.L().Error("tools.SuffixName(file) failed", zap.Any("file", file), zap.Error(err))
+		zap.L().Error("tools.SuffixName(file) failed", zap.Any("file", file))
 		ResponseError(c, CodeFileSuffixNotLegal)
 		return
 	}
