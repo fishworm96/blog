@@ -6,8 +6,8 @@ import (
 
 type Community struct {
 	ID    int64  `json:"id" db:"id"`
-	Name  string `json:"name" db:"name"`
-	Image string `json:"image" db:"image_url"`
+	Name  string `json:"name" db:"name" binding:"required"`
+	Image string `json:"image" db:"image" binding:"required"`
 }
 
 type CommunityDetail struct {
@@ -33,5 +33,5 @@ type CommunityPostList struct {
 type CommunityCreateDetail struct {
 	Name         string                `form:"name" db:"name" binding:"required"`
 	Introduction string                `form:"introduction,omitempty" json:"introduction,omitempty" db:"introduction"` // 过滤为空
-	Md5          string                `form:"md5" db:"image_md5" binding:"required"`
+	Image          string                `form:"image" db:"image" binding:"required"`
 }

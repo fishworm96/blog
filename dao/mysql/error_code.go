@@ -16,4 +16,5 @@ var (
 	ErrorTagExist = errors.New("标签已存在")
 	ErrorTagNotExist = errors.New("标签不存在")
 	ErrorMenuNotExist = errors.New("菜单不存在")
+	ErrorCommunityNotExist = errors.New("分类不存在")
 )

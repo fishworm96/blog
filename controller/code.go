@@ -17,6 +17,7 @@ const (
 	CodePostNotExist
 	CodeTagExist
 	CodeTagNotExist
+	CodeCommunityNotExist
 	CodeNeedLogin
 	CodeInvalidToken
 	CodeFileSuffixNotLegal
@@ -38,6 +39,7 @@ var codeMsgMap = map[ResCode]string{
 	CodePostNotExist: "帖子不存在",
 	CodeTagExist: "标签已存在",
 	CodeTagNotExist: "标签不存在",
+	CodeCommunityNotExist: "分类不存在",
 	CodeNeedLogin: "需要登录",
 	CodeInvalidToken: "无效的token",
 	CodeFileSuffixNotLegal: "文件后缀名不合法",

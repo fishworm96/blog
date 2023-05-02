@@ -90,3 +90,11 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 func CreateCommunity(c models.CommunityCreateDetail) (err error) {
 	return mysql.CreateCommunity(c)
 }
+
+func UpdateCommunity(c models.Community) (err error) {
+	return mysql.UpdateCommunity(c)
+}
+
+func DeleteCommunity(id int64) (err error) {
+	return mysql.DeleteCommunity(id)
+}

@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"blog/dao/mysql"
 	"blog/logic"
 	"blog/models"
+	"errors"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -43,6 +45,7 @@ func CommunityDetailHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+// 创建分类
 func CreateCommunity(c *gin.Context) {
 	var community models.CommunityCreateDetail
 	if err := c.ShouldBindJSON(&community); err != nil {
@@ -61,6 +64,45 @@ func CreateCommunity(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("logic.CreateCommunity(community) failed", zap.Error(err))
 		ResponseError(c, CodeAddFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
+func UpdateCommunity(c *gin.Context) {
+	var community models.Community
+	if err := c.ShouldBindJSON(&community); err != nil {
+		zap.L().Error("update community with param", zap.Any("community", community), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	if err := logic.UpdateCommunity(community); err != nil {
+		zap.L().Error("logic.UpdateCommunity(community) failed", zap.Any("community", community), zap.Error(err))
+		ResponseError(c, CodeUpdateFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
+func DeleteCommunity(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete community with invalid param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	if err := logic.DeleteCommunity(id); err != nil {
+		zap.L().Error("logic.DeleteCommunity(id) failed", zap.Int64("id", id), zap.Error(err))
+		if errors.Is(err, mysql.ErrorCommunityNotExist) {
+			ResponseError(c, CodeCommunityNotExist)
+			return
+		}
+		ResponseError(c, CodeDeleteFailed)
 		return
 	}
 

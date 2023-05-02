@@ -10,9 +10,8 @@ import (
 // GetCommunityList 获取社区列表
 func GetCommunityList() (communityList []*models.Community, err error) {
 	sqlStr := `
-	SELECT c.id, c.name, i.image_url
-	FROM community c
-	INNER JOIN image i ON c.image_md5 = i.md5;
+	SELECT id, name, image
+	FROM community
 	`
 	if err := db.Select(&communityList, sqlStr); err != nil {
 		zap.L().Error("there is no community in db")
@@ -25,10 +24,8 @@ func GetCommunityList() (communityList []*models.Community, err error) {
 func GetCommunityDetail(id int64) (community *models.CommunityDetail, err error) {
 	community = new(models.CommunityDetail)
 	sqlStr := `
-	SELECT c.id, c.name, i.image_url, c.introduction, create_time, update_time
-	FROM community c
-	INNER JOIN image i ON c.image_md5 = i.md5
-	WHERE c.id = ?
+	SELECT id, name, image, introduction, create_time, update_time
+	FROM community WHERE id = ?
 	`
 	if err = db.Get(community, sqlStr, id); err != nil {
 		if err == sql.ErrNoRows {
@@ -54,9 +51,44 @@ func GetTotalCategory() (totalCategory int64, err error) {
 
 func CreateCommunity(c models.CommunityCreateDetail) (err error) {
 	sqlStr := `
-		INSERT INTO community(name, introduction, image_md5)
+		INSERT INTO community(name, introduction, image)
 		VALUES(?, ?, ?)
 	`
-	_, err = db.Exec(sqlStr, c.Name, c.Introduction, c.Md5)
+	_, err = db.Exec(sqlStr, c.Name, c.Introduction, c.Image)
+	return
+}
+
+func UpdateCommunity(c models.Community) (err error) {
+	sqlStr := `
+	UPDATE community
+	SET name = ?, image = ?
+	WHERE id = ?
+	`
+	ret, err := db.Exec(sqlStr, c.Name, c.Image, c.ID)
+	if err != nil {
+		return ErrorUpdateFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorCommunityNotExist
+	}
+	return
+}
+
+func DeleteCommunity(id int64) (err error) {
+	sqlStr := `
+	DELETE FROM community WHERE id = ?
+	`
+	ret, err := db.Exec(sqlStr, id)
+	if err != nil {
+		return ErrorDeleteFailed
+	}
+	n, err := ret.RowsAffected()
+	if n == 0 {
+		return ErrorCommunityNotExist
+	}
+	if err != nil {
+		return err
+	}
 	return
 }

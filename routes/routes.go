@@ -79,6 +79,8 @@ func Setup(mode string) *gin.Engine {
 	}
 	{
 		v1.POST("/community", controller.CreateCommunity)
+		v1.PUT("/community", controller.UpdateCommunity)
+		v1.DELETE("/community/:id", controller.DeleteCommunity)
 	}
 	return r
 }
