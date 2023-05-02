@@ -1,10 +1,13 @@
 package models
 
-import "time"
+import (
+	"mime/multipart"
+	"time"
+)
 
 // 内存对齐
 type Post struct {
-	ID          string     `json:"id" db:"post_id" swaggerignore:"true"`
+	ID          string    `json:"id" db:"post_id" swaggerignore:"true"`
 	Description string    `json:"description" db:"description" binding:"required"`
 	Title       string    `json:"title" db:"title" binding:"required"`     // 文章标题
 	Content     string    `json:"content" db:"content" binding:"required"` // 文章内容
@@ -19,15 +22,15 @@ type Post struct {
 // ApiPostList 帖子列表接口的结构体
 type ApiPostList struct {
 	ApiPostDetailList []*ApiPostDetailList `json:"post_list"`
-	TotalPages int64 `json:"total_pages"`
-	TotalTag int64 `json:"total_tag"`
-	TotalCategory int64 `json:"total_category"`
+	TotalPages        int64                `json:"total_pages"`
+	TotalTag          int64                `json:"total_tag"`
+	TotalCategory     int64                `json:"total_category"`
 }
 
 // APiPostDetail 帖子接口的结构体
 type ApiPostDetail struct {
 	AuthorName       string             `json:"author_name"`
-	Tag              []*Tag           `json:"tag"`
+	Tag              []*Tag             `json:"tag"`
 	VoteNum          int64              `json:"vote_num"`
 	*Post                               // 嵌入帖子结构体
 	*CommunityDetail `json:"community"` // 嵌入社区信息
@@ -40,7 +43,7 @@ type ApiPostDetailList struct {
 	VoteNum          int64              `json:"vote_num"`
 	*Post                               // 嵌入帖子结构体
 	*CommunityDetail `json:"community"` // 嵌入社区信息
-	TotalPages int64 `json:"total_pages"`
+	TotalPages       int64              `json:"total_pages"`
 }
 
 type ApiImage struct {
@@ -48,5 +51,6 @@ type ApiImage struct {
 }
 
 type ApiMd5 struct {
-	Md5 string `json:"md5" db:"md5" binding:"required"`
+	Md5   string                `form:"md5" json:"md5" db:"md5" binding:"required"`
+	Image *multipart.FileHeader `form:"image" binding:"required"`
 }

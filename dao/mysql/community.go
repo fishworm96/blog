@@ -24,7 +24,12 @@ func GetCommunityList() (communityList []*models.Community, err error) {
 // GetCommunityDetail 获取社区详细信息
 func GetCommunityDetail(id int64) (community *models.CommunityDetail, err error) {
 	community = new(models.CommunityDetail)
-	sqlStr := `select id, name, introduction, create_time, update_time from community where id = ?`
+	sqlStr := `
+	SELECT c.id, c.name, i.image_url, c.introduction, create_time, update_time
+	FROM community c
+	INNER JOIN image i ON c.image_md5 = i.md5
+	WHERE c.id = ?
+	`
 	if err = db.Get(community, sqlStr, id); err != nil {
 		if err == sql.ErrNoRows {
 			err = ErrorInvalidID

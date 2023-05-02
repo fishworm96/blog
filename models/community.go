@@ -1,7 +1,6 @@
 package models
 
 import (
-	"mime/multipart"
 	"time"
 )
 
@@ -35,5 +34,4 @@ type CommunityCreateDetail struct {
 	Name         string                `form:"name" db:"name" binding:"required"`
 	Introduction string                `form:"introduction,omitempty" json:"introduction,omitempty" db:"introduction"` // 过滤为空
 	Md5          string                `form:"md5" db:"image_md5" binding:"required"`
-	Image        *multipart.FileHeader `form:"image" binding:"required"`
 }

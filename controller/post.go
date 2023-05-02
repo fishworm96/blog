@@ -250,30 +250,29 @@ func GetPostListHandler2(c *gin.Context) {
 }
 
 func UploadImage(c *gin.Context) {
-	md5 := c.PostForm("md5")
-	if md5 == "" {
-		zap.L().Error("upload Image with invalid param", zap.String("md5", md5))
-		ResponseError(c, CodeInvalidParam)
+	var image models.ApiMd5
+	if err := c.ShouldBind(&image); err != nil {
+		zap.L().Debug("c.ShouldBind(&image) err", zap.Any("err", err))
+		zap.L().Error("create image with invalid param")
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate((trans))))
 		return
 	}
 
-	file, err := c.FormFile("file")
-	if err != nil {
-		zap.L().Error("upload Image with invalid param", zap.Any("file", file), zap.Error(err))
-		ResponseError(c, CodeInvalidParam)
-		return
-	}
-
-	extName, ok := tools.SuffixName(file)
+	extName, ok := tools.SuffixName(image.Image)
 	if !ok {
-		zap.L().Error("tools.SuffixName(file) failed", zap.Any("file", file))
+		zap.L().Error("tools.SuffixName(file) failed", zap.Any("image", image.Image))
 		ResponseError(c, CodeFileSuffixNotLegal)
 		return
 	}
 
-	data, err := logic.UploadImage(file, extName, md5)
+	data, err := logic.UploadImage(image.Image, extName, image.Md5)
 	if err != nil {
-		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", file), zap.Error(err))
+		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", image.Image), zap.Error(err))
 		ResponseError(c, CodeUploadFailed)
 		return
 	}
