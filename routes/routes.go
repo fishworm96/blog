@@ -24,7 +24,6 @@ func Setup(mode string) *gin.Engine {
 	hub := websocket.NewHub()
 	go hub.Run()
 
-
 	r.Use(logger.GinLogger(), logger.GinRecovery(true), middlewares.Cors())
 
 	r.Static("/static", "./static")
@@ -56,7 +55,7 @@ func Setup(mode string) *gin.Engine {
 		v1.POST("/upload_image", controller.UploadImage)
 	}
 	{
-		v1.GET("/role/:id", controller.GetRoleInfoHandler)
+		v1.GET("/role", controller.GetRoleHandler)
 		v1.PUT("role", controller.UpdateRoleHandler)
 	}
 	{
