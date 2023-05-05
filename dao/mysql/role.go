@@ -24,7 +24,7 @@ func GetRoleById(uid int64) (role *models.Role, err error) {
 }
 
 func DeleteRoleAccessByUserID(uid int64) (err error) {
-	sqlStr := `delete from role_access where id = ?`
+	sqlStr := `delete from role_access where role_id = ?`
 	ret, err := db.Exec(sqlStr, uid)
 	if err != nil {
 		return ErrorUpdateFailed
