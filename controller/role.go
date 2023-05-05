@@ -12,6 +12,38 @@ import (
 	"go.uber.org/zap"
 )
 
+// 获取用户权限
+func GetUserRoleHandler(c *gin.Context) {
+	idStr, ok := c.GetQuery("id")
+	// 获取单条数据
+	if ok {
+		zap.L().Error("get role with param", zap.String("idStr", idStr))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("get role with param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	data, err := logic.GetRoleInfoByUserIdHandler(id)
+	if err != nil {
+		zap.L().Error("logic.GetRoleInfoByUserIdHandler failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			ResponseError(c, CodeUserNotExist)
+			return
+		}
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+
+	ResponseSuccess(c, data)
+}
+
+// 获取权限列表
 func GetRoleHandler(c *gin.Context) {
 	idStr, ok := c.GetQuery("id")
 	// 获取单条数据
@@ -22,18 +54,14 @@ func GetRoleHandler(c *gin.Context) {
 			ResponseError(c, CodeInvalidParam)
 			return
 		}
-	
-		data, err := logic.GetRoleInfoByUserIdHandler(id)
+
+		data, err := logic.GetRoleAccessById(id)
 		if err != nil {
-			zap.L().Error("logic.GetRoleInfoByUserIdHandler failed", zap.Error(err))
-			if errors.Is(err, mysql.ErrorUserNotExist) {
-				ResponseError(c, CodeUserNotExist)
-				return
-			}
+			zap.L().Error("logic.GetRoleAccessById(id) failed", zap.Error(err))
 			ResponseError(c, CodeServerBusy)
 			return
 		}
-	
+
 		ResponseSuccess(c, data)
 		return
 	}

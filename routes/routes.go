@@ -50,12 +50,13 @@ func Setup(mode string) *gin.Engine {
 	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.GET("/info/:id", controller.GetUserInfoHandler)
-		v1.GET("/infoList", controller.GetUserInfoListHandler)
+		v1.GET("/info_list", controller.GetUserInfoListHandler)
 		v1.POST("/upload_avatar", controller.UploadAvatar)
 		v1.POST("/upload_image", controller.UploadImage)
 	}
 	{
-		v1.GET("/user_role", controller.GetRoleHandler)
+		v1.GET("/user_role", controller.GetUserRoleHandler)
+		v1.GET("/role", controller.GetRoleHandler)
 		v1.PUT("/role", controller.UpdateRoleHandler)
 	}
 	{

@@ -1,7 +1,7 @@
 package models
 
 type Role struct {
-	RoleID int64 `json:"role_id" db:"id"`
+	RoleID int64 `json:"id" db:"id"`
 	Title string `json:"title" db:"title"`
 	Description string `json:"description" db:"description"`
 }

@@ -23,6 +23,16 @@ func GetRoleById(uid int64) (role *models.Role, err error) {
 	return
 }
 
+func GetRoleAccessById(id int64) (role []string, err error) {
+	sqlStr := `
+	SELECT access_id
+	FROM role_access
+	WHERE role_id = ?
+	`
+	err = db.Select(&role, sqlStr, id)
+	return
+}
+
 func DeleteRoleAccessByUserID(uid int64) (err error) {
 	sqlStr := `delete from role_access where role_id = ?`
 	ret, err := db.Exec(sqlStr, uid)
