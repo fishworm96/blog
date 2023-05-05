@@ -32,7 +32,7 @@ func Setup(mode string) *gin.Engine {
 	v1 := r.Group("/api/v1")
 
 	v1.POST("/email", controller.GetEmailCode)
-	v1.POST("/emailLogin", controller.EmailLoginHandler)
+	v1.POST("/email_login", controller.EmailLoginHandler)
 	v1.POST("/signUp", controller.SignUpHandler)
 	v1.POST("/login", controller.LoginHandler)
 	v1.GET("/community", controller.CommunityHandler)
@@ -55,8 +55,8 @@ func Setup(mode string) *gin.Engine {
 		v1.POST("/upload_image", controller.UploadImage)
 	}
 	{
-		v1.GET("/role", controller.GetRoleHandler)
-		v1.PUT("role", controller.UpdateRoleHandler)
+		v1.GET("/user_role", controller.GetRoleHandler)
+		v1.PUT("/role", controller.UpdateRoleHandler)
 	}
 	{
 		v1.GET("/menu", controller.GetMenuHandler)
@@ -66,7 +66,7 @@ func Setup(mode string) *gin.Engine {
 	}
 	{
 		v1.POST("/post", controller.CreatePostHandler)
-		v1.POST("/post/addPostTag", controller.AddPostTagHandler)
+		v1.POST("/post/add_post_tag", controller.AddPostTagHandler)
 		v1.PUT("/post/edit", controller.UpdatePostHandler)
 		v1.DELETE("/post/:id", controller.DeletePostHandler)
 		v1.POST("/vote", controller.PostVoteController)
