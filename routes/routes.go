@@ -57,8 +57,9 @@ func Setup(mode string) *gin.Engine {
 	{
 		v1.GET("/user_role", controller.GetUserRoleHandler)
 		v1.GET("/role", controller.GetRoleHandler)
-		v1.POST("/role", controller.CreateRole)
+		v1.POST("/role", controller.CreateRoleHandler)
 		v1.PUT("/role", controller.UpdateRoleHandler)
+		v1.DELETE("/role/:id", controller.DeleteRoleAccessByRoleIdHandler)
 	}
 	{
 		v1.GET("/menu", controller.GetMenuHandler)

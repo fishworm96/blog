@@ -61,3 +61,16 @@ func CreateRole(role models.Role) (err error) {
 	_, err = db.Exec(sqlStr, role.Title, role.Description)
 	return
 }
+
+// 通过 role id 删除角色和角色权限
+func DeleteRoleAccessByRoleId(id int64) (err error) {
+	sqlStr := `
+	DELETE r, ra 
+	FROM role r 
+	LEFT JOIN role_access ra 
+	ON r.id = ra.role_id 
+	WHERE r.id = ?;
+	`
+	_, err = db.Exec(sqlStr, id)
+	return
+}

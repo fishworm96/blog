@@ -52,3 +52,8 @@ func UpdateRoleMenu(role *models.RoleMenu) (err error) {
 	}
 	return
 }
+
+// 删除角色
+func DeleteRoleById(id int64) (err error) {
+	return mysql.DeleteRoleAccessByRoleId(id)
+}

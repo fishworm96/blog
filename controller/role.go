@@ -78,7 +78,7 @@ func GetRoleHandler(c *gin.Context) {
 }
 
 // 创建角色
-func CreateRole(c *gin.Context) {
+func CreateRoleHandler(c *gin.Context) {
 	var role models.Role
 	if err := c.ShouldBindJSON(&role); err != nil {
 		zap.L().Error("create role with parma", zap.Error(err))
@@ -89,6 +89,25 @@ func CreateRole(c *gin.Context) {
 	if err := logic.CreateRole(role); err != nil {
 		zap.L().Error("logic.CreateRole(role) failed", zap.Error(err))
 		ResponseError(c, CodeAddFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
+// 删除角色
+func DeleteRoleAccessByRoleIdHandler(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		zap.L().Error("delete role with invalid param", zap.Int64("id", id), zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	if err := logic.DeleteRoleById(id); err != nil {
+		zap.L().Error("logic.DeleteRoleById(id) failed", zap.Error(err))
+		ResponseError(c, CodeDeleteFailed)
 		return
 	}
 
