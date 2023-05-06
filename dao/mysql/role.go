@@ -100,7 +100,7 @@ func DeleteRoleAccessByRoleId(id int64) (err error) {
 	FROM role r 
 	LEFT JOIN role_access ra 
 	ON r.id = ra.role_id 
-	WHERE r.id = ?;
+	WHERE r.id = ?
 	`
 	_, err = db.Exec(sqlStr, id)
 	return

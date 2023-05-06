@@ -85,7 +85,13 @@ func UpdateMenuById(m *models.ParamUpdateMenu) (err error) {
 }
 
 func DeleteMenuById(id int64) (err error) {
-	sqlStr := `delete from access where id = ?`
+	sqlStr := `
+	DELETE a, ra 
+	FROM access a
+	LEFT JOIN role_access ra
+	ON a.id = ra.access_id
+	WHERE a.id = ?
+	`
 	ret, err := db.Exec(sqlStr, id)
 	if err != nil {
 		zap.L().Error("Delete failed", zap.Error(err))
