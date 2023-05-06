@@ -35,14 +35,7 @@ func GetRoleAccessById(id int64) (role []string, err error) {
 
 func DeleteRoleAccessByUserID(uid int64) (err error) {
 	sqlStr := `delete from role_access where role_id = ?`
-	ret, err := db.Exec(sqlStr, uid)
-	if err != nil {
-		return ErrorUpdateFailed
-	}
-	n, err := ret.RowsAffected()
-	if n == 0 {
-		return ErrorUpdateFailed
-	}
+	_, err = db.Exec(sqlStr, uid)
 	return
 }
 
