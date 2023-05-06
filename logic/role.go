@@ -25,7 +25,7 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
 		return
 	}
-	
+
 	data = &models.RoleInfo{
 		Username:    user.NickName,
 		Title:       role.Title,
@@ -58,6 +58,11 @@ func GetRoleAccessById(id int64) (data *models.RoleAccess, err error) {
 
 func CreateRole(role models.Role) (err error) {
 	return mysql.CreateRole(role)
+}
+
+// 修改角色
+func UpdateRole(role models.ParamsRole) (err error) {
+	return mysql.UpdateRole(role)
 }
 
 // 修改角色权限

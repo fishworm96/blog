@@ -77,3 +77,9 @@ type RoleMenu struct {
 	RoleID   int64   `json:"role_id" db:"role_id" binding:"required"`
 	AccessID []int64 `json:"access_id" db:"access_id" binding:"required"`
 }
+
+type ParamsRole struct {
+	RoleID int64 `json:"id" db:"id" binding:"required"`
+	Title string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description" binding:"required"`
+}

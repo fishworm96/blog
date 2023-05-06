@@ -115,6 +115,33 @@ func DeleteRoleAccessByRoleIdHandler(c *gin.Context) {
 }
 
 func UpdateRoleHandler(c *gin.Context) {
+	var role models.ParamsRole
+	if err := c.ShouldBindJSON(&role); err != nil {
+		zap.L().Error("update role with invalid param", zap.Any("role", role), zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	if err := logic.UpdateRole(role); err != nil {
+		zap.L().Error("logic.UpdateRole(role) failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorUpdateFailed) {
+			ResponseError(c, CodeUpdateFailed)
+			return
+		}
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
+// 修改角色权限
+func UpdateRoleAndAccessHandler(c *gin.Context) {
 	r := new(models.RoleMenu)
 	if err := c.ShouldBindJSON(r); err != nil {
 		zap.L().Debug("c.ShouldBindJSON(r) failed", zap.Any("err", err))
