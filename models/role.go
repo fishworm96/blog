@@ -11,3 +11,8 @@ type RoleInfo struct {
 	Title string `json:"title"`
 	Description string `json:"description"`
 }
+
+type RoleAccess struct {
+	Role *Role `json:"role"`
+	RoleAccess []string `json:"access_ids"`
+}

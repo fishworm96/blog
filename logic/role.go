@@ -19,11 +19,13 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
 		return
 	}
+
 	role, err := mysql.GetRoleById(uid)
 	if err != nil {
 		zap.L().Error("mysql.GetUserById(uid), failed", zap.Int64("uid", uid))
 		return
 	}
+	
 	data = &models.RoleInfo{
 		Username:    user.NickName,
 		Title:       role.Title,
@@ -33,8 +35,25 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 }
 
 // 根绝 id 获取角色权限
-func GetRoleAccessById(id int64) (data []string, err error) {
-	return mysql.GetRoleAccessById(id)
+func GetRoleAccessById(id int64) (data *models.RoleAccess, err error) {
+	access_id, err := mysql.GetRoleAccessById(id)
+	if err != nil {
+		zap.L().Error("mysql.GetRoleAccessById(id) failed", zap.Error(err))
+		return
+	}
+
+	role, err := mysql.GetRoleByRoleId(id)
+	if err != nil {
+		zap.L().Error("mysql.GetRoleByRoleId(id) failed", zap.Error(err))
+		return
+	}
+
+	data = &models.RoleAccess{
+		Role: &role,
+		RoleAccess: access_id,
+	}
+
+	return
 }
 
 func CreateRole(role models.Role) (err error) {

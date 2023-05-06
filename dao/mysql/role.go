@@ -23,13 +23,23 @@ func GetRoleById(uid int64) (role *models.Role, err error) {
 	return
 }
 
-func GetRoleAccessById(id int64) (role []string, err error) {
+func GetRoleByRoleId(id int64) (role models.Role ,err error) {
+	sqlStr := `
+	SELECT id, title, description
+	FROM role
+	WHERE id = ?
+	`
+	err = db.Get(&role, sqlStr, id)
+	return
+}
+
+func GetRoleAccessById(id int64) (access_id []string, err error) {
 	sqlStr := `
 	SELECT access_id
 	FROM role_access
 	WHERE role_id = ?
 	`
-	err = db.Select(&role, sqlStr, id)
+	err = db.Select(&access_id, sqlStr, id)
 	return
 }
 
