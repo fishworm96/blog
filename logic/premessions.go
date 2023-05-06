@@ -3,6 +3,7 @@ package logic
 import (
 	"blog/dao/mysql"
 	"blog/models"
+	"blog/pkg/tools"
 
 	"go.uber.org/zap"
 )
@@ -32,17 +33,6 @@ func GetMenuList() (data []*models.MenuDetail, err error) {
 	return
 }
 
-func getTreeRecursive(list []*models.MenuDetail, parentId int64) []*models.MenuDetail {
-	res := make([]*models.MenuDetail, 0)
-	for _, v := range list {
-		if v.ModuleID == parentId {
-			v.Children = getTreeRecursive(list, v.ID)
-			res = append(res, v)
-		}
-	}
-	return res
-}
-
 func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
 	info, err := mysql.GetUserInfoByUserId(id)
 	if err != nil {
@@ -54,7 +44,7 @@ func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
 		return
 	}
 	menus, err := mysql.GetMenuByUserId(id)
-	data = getTreeRecursive(menus, 0)
+	data = tools.GetTreeRecursive(menus, 0)
 	return
 }
 

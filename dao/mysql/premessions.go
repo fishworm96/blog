@@ -49,7 +49,7 @@ func GetMenuByUserId(id int64) (menu []*models.MenuDetail, err error) {
 	sqlStr := `select id, title, icon, path, type, module_id from access where id in (
 		select access_id from role_access where role_id = (
 		select role_id from user where user_id = ?
-		)
+		) ORDER BY id
 	)`
 	err = db.Select(&menu, sqlStr, id)
 	return
