@@ -2,8 +2,8 @@ package models
 
 type Role struct {
 	RoleID int64 `json:"id" db:"id"`
-	Title string `json:"title" db:"title"`
-	Description string `json:"description" db:"description"`
+	Title string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description" binding:"required"`
 }
 
 type RoleInfo struct {

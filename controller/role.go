@@ -77,6 +77,24 @@ func GetRoleHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
+// 创建角色
+func CreateRole(c *gin.Context) {
+	var role models.Role
+	if err := c.ShouldBindJSON(&role); err != nil {
+		zap.L().Error("create role with parma", zap.Error(err))
+		ResponseError(c, CodeInvalidParam)
+		return
+	}
+
+	if err := logic.CreateRole(role); err != nil {
+		zap.L().Error("logic.CreateRole(role) failed", zap.Error(err))
+		ResponseError(c, CodeAddFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
 func UpdateRoleHandler(c *gin.Context) {
 	r := new(models.RoleMenu)
 	if err := c.ShouldBindJSON(r); err != nil {

@@ -51,3 +51,13 @@ func AddRoleAccess(RoleID, AccessID int64) (err error) {
 	}
 	return
 }
+
+// 创建角色
+func CreateRole(role models.Role) (err error) {
+	sqlStr := `
+	INSERT INTO role(title, description)
+	VALUES (?, ?)
+	`
+	_, err = db.Exec(sqlStr, role.Title, role.Description)
+	return
+}

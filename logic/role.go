@@ -7,10 +7,12 @@ import (
 	"go.uber.org/zap"
 )
 
+// 获取角色列表
 func GetRole() (role []*models.Role, err error) {
 	return mysql.GetRole()
 }
 
+// 根据用户 id 获取信息
 func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 	user, err := mysql.GetUserById(uid)
 	if err != nil {
@@ -30,10 +32,16 @@ func GetRoleInfoByUserIdHandler(uid int64) (data *models.RoleInfo, err error) {
 	return
 }
 
+// 根绝 id 获取角色权限
 func GetRoleAccessById(id int64) (data []string, err error) {
 	return mysql.GetRoleAccessById(id)
 }
 
+func CreateRole(role models.Role) (err error) {
+	return mysql.CreateRole(role)
+}
+
+// 修改角色权限
 func UpdateRoleMenu(role *models.RoleMenu) (err error) {
 	if err = mysql.DeleteRoleAccessByUserID(role.RoleID); err != nil {
 		return
