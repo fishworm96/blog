@@ -29,12 +29,12 @@ type EmailLogin struct {
 
 // ParamPost
 type ParamPost struct {
-	CommunityID int64 `json:"community_id" db:"id" binding:"required"`
-	Tag []int64 `json:"tag" binding:"required"` // 标签
-	PostID string `json:"post_id" db:"post_id" binding:"required"`
-	Title   string `json:"title" binding:"required"`   // 文章标题
-	Content string `json:"content" binding:"required"` // 文章内容
-	Description string `json:"description" db:"description" binding:"required"`
+	CommunityID int64   `json:"community_id" db:"id" binding:"required"`
+	Tag         []int64 `json:"tag" binding:"required"` // 标签
+	PostID      string  `json:"post_id" db:"post_id" binding:"required"`
+	Title       string  `json:"title" binding:"required"`   // 文章标题
+	Content     string  `json:"content" binding:"required"` // 文章内容
+	Description string  `json:"description" db:"description" binding:"required"`
 }
 
 // 帖子id和点赞两个参数
@@ -45,7 +45,7 @@ type ParamVoteData struct {
 }
 
 type ParamPostList struct {
-	CommunityID int64  `json:"community_id" form:"id"`   // 可以为空
+	CommunityID int64  `json:"community_id" form:"id"`             // 可以为空
 	Page        int64  `json:"page" form:"page" example:"1"`       // 页码
 	Size        int64  `json:"size" form:"size" example:"1"`       // 每页数据量
 	Order       string `json:"order" form:"order" example:"score"` // 排序依据
@@ -62,6 +62,7 @@ type ParamMenu struct {
 	Path     string `json:"path" db:"path" binding:"required"`
 	Type     *int64 `json:"type" db:"type" binding:"required"`
 	ModuleID *int64 `json:"module_id" db:"module_id" binding:"required"`
+	IsShow   *bool  `json:"is_show" db:"is_show" binding:"required"`
 }
 
 type ParamUpdateMenu struct {
@@ -71,6 +72,7 @@ type ParamUpdateMenu struct {
 	Title    string `json:"title" db:"title" binding:"required"`
 	Icon     string `json:"icon" db:"icon"`
 	Path     string `json:"path" db:"path" binding:"required"`
+	IsShow   *bool  `json:"is_show" db:"is_show" binding:"required"`
 }
 
 type RoleMenu struct {
@@ -79,7 +81,7 @@ type RoleMenu struct {
 }
 
 type ParamsRole struct {
-	RoleID int64 `json:"id" db:"id" binding:"required"`
-	Title string `json:"title" db:"title" binding:"required"`
+	RoleID      int64  `json:"id" db:"id" binding:"required"`
+	Title       string `json:"title" db:"title" binding:"required"`
 	Description string `json:"description" db:"description" binding:"required"`
 }

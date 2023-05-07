@@ -50,6 +50,10 @@ func GetMenuByUserId(id int64) (data []*models.MenuDetail, err error) {
 
 func GetMenuByMenuId(id int64) (data *models.MenuDetailInfo, err error) {
 	data, err = mysql.GetMenuByMenuId(id)
+	if err != nil {
+		zap.L().Error("mysql.GetMenuByMenuId(id) failed", zap.Int64("id", id), zap.Error(err))
+		return
+	}
 	return
 }
 
@@ -57,8 +61,13 @@ func AddMenu(m *models.ParamMenu) error {
 	return mysql.AddMenu(m)
 }
 
-func UpdateMenu(m *models.ParamUpdateMenu) error {
-	return mysql.UpdateMenuById(m)
+func UpdateMenu(m *models.ParamUpdateMenu) (err error) {
+	err = mysql.UpdateMenuById(m)
+	if err != nil {
+		zap.L().Error("mysql.UpdateMenuById(m) failed", zap.Error(err))
+		return
+	}
+	return 
 }
 
 func DeleteMenu(id int64) (state bool, err error) {

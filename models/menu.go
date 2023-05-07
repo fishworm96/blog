@@ -8,6 +8,7 @@ type MenuDetail struct {
 	Icon     string        `json:"icon" db:"icon"`
 	Path     string        `json:"path" db:"path"`
 	Children []*MenuDetail `json:"children,omitempty"` // 过滤为空
+	IsShow   bool           `json:"is_show" db:"is_show"`
 }
 
 type MenuDetailInfo struct {
@@ -18,4 +19,5 @@ type MenuDetailInfo struct {
 	Icon       string `json:"icon" db:"icon"`
 	Path       string `json:"path" db:"path"`
 	ParentName string `json:"parent_name" db:"parent_name"`
+	IsShow     bool    `json:"is_show" db:"is_show"`
 }
