@@ -70,6 +70,16 @@ func UpdateMenu(m *models.ParamUpdateMenu) (err error) {
 	return 
 }
 
+// 根据菜单 id 更新菜单状态
+func UpdateMenuStatus(s models.ParamsMenuStatus) (err error) {
+	err = mysql.UpdateMenuStatus(s)
+	if err != nil {
+		zap.L().Error("mysql.UpdateMenuStatus(s) failed", zap.Error(err))
+		return
+	}
+	return
+}
+
 func DeleteMenu(id int64) (state bool, err error) {
 	m, err := mysql.GetMenu(id)
 	if err != nil {

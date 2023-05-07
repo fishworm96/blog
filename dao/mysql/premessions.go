@@ -83,6 +83,16 @@ func UpdateMenuById(m *models.ParamUpdateMenu) (err error) {
 	return
 }
 
+func UpdateMenuStatus(s models.ParamsMenuStatus) (err error) {
+	sqlStr := `
+	UPDATE access
+	SET is_show = ?
+	WHERE id = ?
+	`
+	_, err = db.Exec(sqlStr, s.IsShow, s.Id)
+	return
+}
+
 func DeleteMenuById(id int64) (err error) {
 	sqlStr := `
 	DELETE a, ra 

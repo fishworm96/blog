@@ -114,6 +114,29 @@ func UpdateMenuHandler(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
+func UpdateStatusHandler(c *gin.Context) {
+	var status models.ParamsMenuStatus
+	if err := c.ShouldBindJSON(&status); err != nil {
+		zap.L().Error("c.ShouldBindJSON(&status) failed", zap.Any("status", status), zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	err := logic.UpdateMenuStatus(status)
+	if err != nil {
+		zap.L().Error("logic.UpdateMenuStatus(status) failed", zap.Error(err))
+		ResponseError(c, CodeUpdateFailed)
+		return
+	}
+
+	ResponseSuccess(c, nil)
+}
+
 // 删除菜单
 func DeleteMenuHandler(c *gin.Context) {
 	idStr := c.Param("id")

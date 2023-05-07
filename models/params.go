@@ -85,3 +85,8 @@ type ParamsRole struct {
 	Title       string `json:"title" db:"title" binding:"required"`
 	Description string `json:"description" db:"description" binding:"required"`
 }
+
+type ParamsMenuStatus struct {
+	Id     int64 `json:"id" db:"id" binding:"required"`
+	IsShow *bool  `json:"is_show" db:"is_show" binding:"required"`
+}
