@@ -29,7 +29,7 @@ func CheckUserExist(username string) (err error) {
 func InsertUser(user *models.User) (err error) {
 	// 执行sql语句入库
 	user.Password = encryptPassword(user.Password)
-	sqlStr := `insert into user(user_id, username, password) values(?, ?, ?)`
+	sqlStr := `insert into user(user_id, username, password, is_super, role_id, nick_name) values(?, ?, ?, 0, 2, "user")`
 	_, err = db.Exec(sqlStr, user.UserID, user.Username, user.Password)
 	return err
 }
