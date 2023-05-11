@@ -99,15 +99,7 @@ func GetPostByTagId(id int64, page, size int64) (posts []*models.Post, err error
 // UpdateTag 更新数据库标签名称
 func UpdateTag(tag *models.Tag) (err error) {
 	sqlStr := `update tag set tag_name = ? where id = ?`
-	ret, err := db.Exec(sqlStr, tag.Name, tag.ID)
-	if err != nil {
-		zap.L().Error("Update failed", zap.Error(err))
-		return ErrorUpdateFailed
-	}
-	n, err := ret.RowsAffected()
-	if n == 0 {
-		return ErrorTagNotExist
-	}
+	_, err = db.Exec(sqlStr, tag.Name, tag.ID)
 	return err
 }
 

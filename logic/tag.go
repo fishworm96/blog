@@ -72,7 +72,7 @@ func GetTagByName(name string, page, size int64) (data *models.ApiTagDetail, err
 		return
 	}
 	data.TotalPages = totalTag
-	
+
 	return
 }
 
@@ -80,12 +80,13 @@ func GetTagList() (data []*models.Tag, err error) {
 	return mysql.GetTagList()
 }
 
-func UpdateTag(tag *models.Tag) error {
-	// 判断标签是否存在
-	if err := mysql.CheckTagExist(tag.Name); err != nil {
-		return err
+func UpdateTag(tag *models.Tag) (err error) {
+	err = mysql.UpdateTag(tag)
+	if err != nil {
+		zap.L().Error("mysql.UpdateTag(tag)", zap.Error(err))
+		return
 	}
-	return mysql.UpdateTag(tag)
+	return
 }
 
 func DeleteTagById(tid int64) error {
