@@ -7,10 +7,12 @@ import (
 	"blog/pkg/snowflake"
 	"blog/pkg/tools"
 	"blog/setting"
+	"bytes"
 	"context"
 	"mime/multipart"
 	"strconv"
 
+	"github.com/disintegration/imaging"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"go.uber.org/zap"
@@ -265,7 +267,7 @@ func GetPostListNew(p *models.ParamPostList) (data []*models.ApiPostDetailList, 
 	return
 }
 
-func UploadImage(file *multipart.FileHeader, extName, md5 string) (data models.ApiImage, err error) {
+func UploadImage(file *multipart.FileHeader, extName, md5 string, IsThumbnail bool) (data models.ApiImage, err error) {
 	url, err := mysql.GetImageByMd5(md5)
 	if len(url) > 0 {
 		data.Url = url
@@ -297,11 +299,40 @@ func UploadImage(file *multipart.FileHeader, extName, md5 string) (data models.A
 
 	key := "image/" + strconv.FormatInt(tools.GetUnix(), 10)
 
-	err = formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra)
+	// 缩放图片
+	if IsThumbnail {
+		data.Url = ""
+		// 将文件读取到内存中
+		img, err := imaging.Decode(src)
+		zap.L().Error("imaging.Decode(src) failed", zap.Error(err))
+		if err != nil {
+			return data, err
+		}
 
-	if err != nil {
-		return
+		resizedImage := imaging.Resize(img, 290, 160, imaging.Lanczos)
+
+		// 创建一个内存缓冲区，用于保存缩放后的图像
+		buf := new(bytes.Buffer)
+		err = imaging.Encode(buf, resizedImage, imaging.JPEG)
+		if err != nil {
+			zap.L().Error("imaging.Encode(buf, resizedImage, imaging.JPEG) failed", zap.Error(err))
+			return data, err
+		}
+		
+		err = formUploader.Put(context.Background(), &ret, upToken, key, buf, int64(buf.Len()), &putExtra)
+		if err != nil {
+			zap.L().Error("formUploader.Put(context.Background(), &ret, upToken, key, buf, int64(buf.Len()), &putExtra) failed", zap.Error(err))
+			return data, err
+		}
+	} else {
+		// 不缩放图片
+		err = formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra)
+		if err != nil {
+			zap.L().Error("formUploader.Put(context.Background(), &ret, upToken, key, src, file.Size, &putExtra) failed", zap.Error(err))
+			return
+		}
 	}
+
 
 	data.Url = "http://" + setting.Conf.ImgUrl + ret.Key
 	mysql.CreateImageUrl(data.Url, md5)

@@ -53,4 +53,5 @@ type ApiImage struct {
 type ApiMd5 struct {
 	Md5   string                `form:"md5" json:"md5" db:"md5" binding:"required"`
 	Image *multipart.FileHeader `form:"image" binding:"required"`
+	IsThumbnail bool `form:"is_thumbnail"`
 }

@@ -270,7 +270,7 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	data, err := logic.UploadImage(image.Image, extName, image.Md5)
+	data, err := logic.UploadImage(image.Image, extName, image.Md5, image.IsThumbnail)
 	if err != nil {
 		zap.L().Error("logic.UploadImage(file) failed", zap.Any("file", image.Image), zap.Error(err))
 		ResponseError(c, CodeUploadFailed)
