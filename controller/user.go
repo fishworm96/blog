@@ -187,6 +187,7 @@ func UploadAvatar(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
+// 获取邮箱验证码
 func GetEmailCode(c *gin.Context) {
 	e := new(models.Email)
 	if err := c.ShouldBindJSON(e); err != nil {
