@@ -1,9 +1,10 @@
 package logic
 
 import (
+	"strconv"
+
 	"blog/dao/mysql"
 	"blog/models"
-	"strconv"
 
 	"go.uber.org/zap"
 )
@@ -23,10 +24,10 @@ func GetCommunityList() (data []*models.CommunityPostList, err error) {
 		}
 
 		communityDetail := &models.CommunityPostList{
-			ID: community.ID,
-			Name: community.Name,
+			ID:    community.ID,
+			Name:  community.Name,
 			Image: community.Image,
-			Post: posts,
+			Post:  posts,
 		}
 
 		data = append(data, communityDetail)
@@ -70,12 +71,6 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 		data.ApiPostDetailList = append(data.ApiPostDetailList, postDetail)
 	}
 
-	totalPages, err := mysql.GetTotalPages()
-	if err != nil {
-		zap.L().Error("mysql.GetTotalPages(), failed", zap.Error(err))
-		return
-	}
-
 	community, err := mysql.GetCommunityDetail(id)
 	if err != nil {
 		zap.L().Error("mysql.GetCommunityDetail(), failed", zap.Error(err))
@@ -83,7 +78,7 @@ func GetCommunityDetail(id, page, size int64) (data *models.CommunityPost, err e
 	}
 
 	data.CommunityDetail = community
-	data.TotalPages = totalPages
+	data.TotalPages = int64(len(data.ApiPostDetailList))
 	return
 }
 

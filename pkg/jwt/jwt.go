@@ -59,7 +59,7 @@ func RefreshToken(tokenString, username string, userID int64) (string, error, bo
 
 	// 如果Token还有30分钟过期，则生成新的Token
 	timeRemaining := time.Until(time.Unix(claims.ExpiresAt, 0))
-	if timeRemaining <= 10 * time.Minute {
+	if timeRemaining <= 30*time.Minute {
 		newToken, err := GenToken(userID, username)
 		if err != nil {
 			return "", err, false
@@ -67,7 +67,6 @@ func RefreshToken(tokenString, username string, userID int64) (string, error, bo
 		return newToken, nil, true
 	}
 
-	// 如果Token未过期且距离过期时间还有超过30分钟，则返回原始Token
 	return "", nil, false
 }
 

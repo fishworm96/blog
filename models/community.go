@@ -31,7 +31,7 @@ type CommunityPostList struct {
 }
 
 type CommunityCreateDetail struct {
-	Name         string                `form:"name" db:"name" binding:"required"`
-	Introduction string                `form:"introduction,omitempty" json:"introduction,omitempty" db:"introduction"` // 过滤为空
-	Image          string                `form:"image" db:"image" binding:"required"`
+	Name         string `form:"name" db:"name" binding:"required"`
+	Introduction string `form:"introduction,omitempty" json:"introduction,omitempty" db:"introduction"` // 过滤为空
+	Image        string `form:"image" db:"image" binding:"required"`
 }
